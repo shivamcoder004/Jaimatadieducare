@@ -281,7 +281,8 @@ useEffect(() => {
   {(Object.keys(courses) as Array<keyof typeof courses>).map((slug) => (
     <li key={slug}>
       <Link 
-        href={`/course/${slug}`} 
+        href={`/course/${slug}`}
+        onClick={() => setMobileOpen(false)} 
         className="block hover:text-orange-500 capitalize"
       >
         {/* Ab TypeScript ko pata hai ki courses[slug] safe hai */}
@@ -308,6 +309,8 @@ useEffect(() => {
   <li key={slug}>
     <Link
       href={`/colleges/${slug}`}
+      onClick={() => setMobileOpen(false)} 
+
       className="block hover:text-orange-500"
     >
       {category.title.replace("Colleges in India", "")}
@@ -326,7 +329,7 @@ useEffect(() => {
     </Link>
 
     {/* Contact */}
-    <Link  href="/contact"
+    <Link onClick={()=>setMobileOpen(false)} href="/contact"
       className="flex items-center gap-3 text-lg hover:text-orange-500 transition">
       <Phone size={20} className="text-blue-600"/>
       Contact
