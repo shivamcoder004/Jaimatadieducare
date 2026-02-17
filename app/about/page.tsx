@@ -195,7 +195,7 @@ export default function AboutPage() {
               "Humara wada hai ki hum aapko kabhi bhatakne nahi denge. Aapka future hamari zimmedari hai."
             </div>
             <div className="pt-4 font-black tracking-widest text-slate-900 uppercase">
-              — Team Jai Mata Di Educate
+              — Team Jai Mata Di Educare
             </div>
           </div>
         </div>

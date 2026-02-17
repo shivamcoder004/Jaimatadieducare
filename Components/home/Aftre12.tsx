@@ -28,7 +28,7 @@ export default function After12thPage() {
       <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] rotate-[-12deg] scale-125 flex flex-col gap-12 select-none">
         {[...Array(10)].map((_, i) => (
           <div key={i} className="whitespace-nowrap text-6xl md:text-8xl font-black tracking-tighter text-indigo-900">
-            JAI MATA DI EDUCATE HO • JAI MATA DI EDUCATE HO • JAI MATA DI EDUCATE HO • JAI MATA DI EDUCATE 
+            JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE 
           </div>
         ))}
       </div>
@@ -114,7 +114,7 @@ export default function After12thPage() {
                 <span className="text-xl group-hover:translate-x-1 transition-transform">→</span>
               </div>
            </button>
-           <p className="text-[10px] font-bold text-slate-400 italic">Jai Mata Di | Educate</p>
+           <p className="text-[10px] font-bold text-slate-400 italic">Jai Mata Di | Educare</p>
         </div>
       </main>
     </div>

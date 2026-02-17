@@ -53,7 +53,7 @@ export default function Footer() {
                 <GraduationCap size={28} className="text-white" />
               </div>
               <h2 className="text-2xl font-black tracking-tighter uppercase">
-                JAI MATA DI <span className="text-orange-500 underline decoration-2">EDUCATE</span>
+                JAI MATA DI <span className="text-orange-500 underline decoration-2">EDUCARE</span>
               </h2>
             </div>
             <p className="text-blue-100/70 text-sm leading-relaxed italic">
@@ -129,7 +129,7 @@ export default function Footer() {
                 <Phone size={20} className="text-orange-500 shrink-0" />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Call Experts</p>
-                  <a href="tel:+917304455555" className="hover:text-orange-400 transition-colors">+91 730 445 5555</a>
+                  <a href="tel:+917304455555" className="hover:text-orange-400 transition-colors">+918507948665</a>
                 </div>
               </div>
             </div>
@@ -140,17 +140,30 @@ export default function Footer() {
         {/* SEO Keywords Tag Cloud */}
         <div className="border-t border-white/10 pt-8 mb-8">
           <p className="text-[10px] text-blue-100/30 uppercase tracking-[0.2em] font-bold mb-4">India's Best Admission Counselor in Motihari</p>
-          <div className="flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-blue-100/40">
-            <span>MBBS Admission 2026</span> • <span>Top Engineering Colleges Bihar</span> • 
-            <span>Counseling in Motihari</span> • <span>Government Exam Notifications</span> • 
-            <span>Jai Mata Di Education Services</span> • <span>Career Guidance Motihari</span>
-          </div>
+         <div className="flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-blue-100/40 leading-relaxed">
+
+  <span>B.Tech Admission 2026</span> •
+  <span>Polytechnic Admission Bihar</span> •
+  <span>BCA / BBA Counselling</span> •
+  <span>MBA / MCA College Selection</span> •
+  <span>B.Sc Agriculture Admission</span> •
+  <span>B.Sc Nursing & GNM Admission</span> •
+  <span>B. Pharmacy Guidance</span> •
+  <span>BPT Physiotherapy Admission</span> •
+  <span>Hotel Management Colleges</span> •
+  <span>Law (BALLB) Admission Help</span> •
+  <span>Top Engineering Colleges Bihar</span> •
+  <span>Career Counselling after 12th</span> •
+  <span>Direct Admission Guidance</span> •
+  <span>Jai Mata Di Education Services</span>
+
+</div>
         </div>
 
         {/* Bottom Bar with Dasynoma Credits */}
         <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-xs text-blue-100/50 text-center md:text-left">
-             <p>© {currentYear} Jai Mata Di Educate. All rights reserved.</p>
+             <p>© {currentYear} Jai Mata Di Educare. All rights reserved.</p>
              <p className="mt-1 flex items-center justify-center md:justify-start gap-2">
                 Made with ❤️ for Indian Students 
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -159,7 +172,7 @@ export default function Footer() {
 
           {/* DASYNOMA BRANDING SECTION */}
           <motion.a 
-            href="https://dasynoma.com" 
+            href="https://dasynoma.in" 
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}

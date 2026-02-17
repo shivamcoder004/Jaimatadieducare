@@ -29,7 +29,7 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
 
 // Update these to match your actual college names from the image
 const COLLEGES = [
-  { id: 1, name: "BABA FARID", logo: "/jai_Mata_Di_Educate.jpg" },
+  { id: 1, name: "BABA FARID", logo: "/jai_Mata_Di_Educare.jpg" },
   { id: 2, name: "GURU KASHI UNIVERSITY", logo: "" },
   { id: 3, name: "RIT ROORKEE", logo: "" },
   { id: 4, name: "SHRI RAM", logo: "" },

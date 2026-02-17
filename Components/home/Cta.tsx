@@ -58,7 +58,7 @@ export default function CTASection() {
           </h2>
 
           <p className="text-blue-100 text-lg md:text-xl mb-10 leading-relaxed font-light">
-            Join lakhs of students who trust <span className="font-bold text-white underline decoration-yellow-400 decoration-2 underline-offset-4">Jai Mata Di Educate</span> for their college and course selection.
+            Join lakhs of students who trust <span className="font-bold text-white underline decoration-yellow-400 decoration-2 underline-offset-4">Jai Mata Di Educare</span> for their college and course selection.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

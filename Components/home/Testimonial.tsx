@@ -35,7 +35,7 @@ export default function TestimonialSection() {
       name: "Rahul Verma",
       designation: "B.Tech CSE",
       rating: 5,
-      review: "The counseling process was so smooth. I was confused between branches, but Educate Ho experts guided me based on my rank.",
+      review: "The counseling process was so smooth. I was confused between branches, but Educare Ho experts guided me based on my rank.",
     },
     {
       name: "Ananya Iyer",
@@ -86,10 +86,10 @@ export default function TestimonialSection() {
           <div className="text-left">
             <div className="flex items-center gap-2 mb-2">
                 <span className="h-[2px] w-8 bg-emerald-700"></span>
-                <p className="text-emerald-800 font-bold text-xs tracking-[0.3em] uppercase">Jai Mata Di <span className='text-amber-300'>Educate</span></p>
+                <p className="text-emerald-800 font-bold text-xs tracking-[0.3em] uppercase">Jai Mata Di <span className='text-amber-300'>Educare</span></p>
             </div>
             <h2 className="text-4xl md:text-6xl font-serif text-slate-900">Student <span className="text-emerald-700 italic">Success Stories</span></h2>
-            <p className="text-slate-500 mt-3 font-medium max-w-md">Real experiences from students who found their dream campus with Educate Ho.</p>
+            <p className="text-slate-500 mt-3 font-medium max-w-md">Real experiences from students who found their dream campus with Educare Ho.</p>
           </div>
 
           <div className="flex items-center gap-4">
