@@ -40,7 +40,7 @@ export default function Hero() {
               Get Free Consultation
             </button>
             <Link
-              href="https://wa.me/919876543210"
+              href="https://wa.me/8507948665"
               className="group border border-white/20 hover:bg-white/5 px-8 py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2"
             >
               WhatsApp Now
@@ -72,45 +72,93 @@ export default function Hero() {
           
           {/* 1. MOBILE ONLY: Attractive Image/Illustration */}
           <div className="block lg:hidden w-full max-w-[320px] md:max-w-[400px] animate-float">
-  <div className="relative aspect-square">
+ <div className="relative flex items-center border-y border-white/10 py-8 bg-gradient-to-r from-transparent via-white/5 to-transparent">
     
-    {/* 1. Background Glow/Circle Layer */}
-    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-orange-400/20 rounded-full border border-white/10 shadow-2xl"></div>
+    {/* Horizontal Marquee Wrapper - Speed slowed down to 40s */}
+    <div className="flex whitespace-nowrap animate-[marquee-horizontal_40s_linear_infinite] gap-16 items-center">
+      
+      {/* Course List with specific icons */}
+      {[
+        { name: "B.Tech/B.E. (Engineering)", icon: "⚙️" },
+        { name: "BCA, BBA", icon: "💻" },
+        { name: "MCA, MBA", icon: "📊" },
+        { name: "POLYTECHNIC", icon: "🛠️" },
+        { name: "BALLB, B.Sc. Nursing", icon: "⚖️" },
+        { name: "GNM, B. Pharmacy", icon: "💊" },
+        { name: "Hotel Management", icon: "🏨" },
+        { name: "B.Sc. Agriculture", icon: "🌾" },
+        { name: "Physiotherapy (BPT)", icon: "🩺" }
+      ].map((course, index) => (
+        <div key={index} className="flex items-center gap-6 group">
+          {/* Main Floating Icon */}
+          <span className="text-4xl filter drop-shadow-[0_0_10px_rgba(244,180,0,0.5)] animate-bounce" style={{ animationDuration: '3s' }}>
+            {course.icon}
+          </span>
+          
+          {/* Divider Icon */}
+          <span className="text-orange-500 text-2xl opacity-50">✦</span>
+          
+          {/* Bold Transparent Styled Text */}
+          <span 
+            className="text-6xl font-black uppercase italic tracking-tighter transition-all duration-500 group-hover:scale-110"
+            style={{
+              WebkitTextStroke: '1.5px rgba(255,255,255,0.3)',
+              color: 'transparent',
+              textShadow: '0 0 20px rgba(255,255,255,0.05)'
+            }}
+          >
+            {course.name}
+          </span>
+        </div>
+      ))}
 
-    {/* 2. Image Container - Isko rounded-full kiya hai taaki image circle bane */}
-    <div className="absolute inset-2 rounded-full overflow-hidden border-4 border-white/20 shadow-inner">
-      <img 
-        src="/Jai_mata_di_educatee.jpg" 
-        alt="Founder" 
-        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-in-out scale-110 hover:scale-100"
-        onError={(e) => {
-          e.currentTarget.src = "https://via.placeholder.com/400x400?text=Check+Extension";
-        }}
-      />
+      {/* Duplicate for Infinite Seamless Loop */}
+      {[
+        { name: "B.Tech/B.E. (Engineering)", icon: "⚙️" },
+        { name: "BCA, BBA", icon: "💻" },
+        { name: "MCA, MBA", icon: "📊" },
+        { name: "POLYTECHNIC", icon: "🛠️" },
+        { name: "BALLB, B.Sc. Nursing", icon: "⚖️" },
+        { name: "GNM, B. Pharmacy", icon: "💊" },
+        { name: "Hotel Management", icon: "🏨" },
+        { name: "B.Sc. Agriculture", icon: "🌾" },
+        { name: "Physiotherapy (BPT)", icon: "🩺" }
+      ].map((course, index) => (
+        <div key={`dup-${index}`} className="flex items-center gap-6 group">
+          <span className="text-4xl filter drop-shadow-[0_0_10px_rgba(244,180,0,0.5)] animate-bounce" style={{ animationDuration: '3s' }}>
+            {course.icon}
+          </span>
+          <span className="text-orange-500 text-2xl opacity-50">✦</span>
+          <span 
+            className="text-6xl font-black uppercase italic tracking-tighter"
+            style={{
+              WebkitTextStroke: '1.5px rgba(255,255,255,0.3)',
+              color: 'transparent'
+            }}
+          >
+            {course.name}
+          </span>
+        </div>
+      ))}
     </div>
-
-    {/* 3. Floating Elements for Mobile Beauty */}
-    <div className="absolute -top-2 -right-2 z-20 bg-white/10 backdrop-blur-xl p-4 rounded-2xl border border-white/20 shadow-xl animate-bounce">
-      <span className="text-2xl">⭐</span>
-    </div>
-    
-    <div className="absolute bottom-6 -left-4 z-20 bg-white/10 backdrop-blur-xl p-4 rounded-2xl border border-white/20 shadow-xl animate-pulse">
-      <span className="text-2xl">📖</span>
-    </div>
-
-    {/* Optional: Founder Tag */}
-    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 z-30 bg-orange-600 text-white px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg shadow-orange-900/20">
-    Lead Counselor    </div>
   </div>
+
+  {/* CSS for Horizontal Animation */}
+  <style dangerouslySetInnerHTML={{ __html: `
+    @keyframes marquee-horizontal {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  `}} />
 </div>
 
           {/* 2. DESKTOP ONLY: Grid Cards */}
           <div className="hidden lg:grid grid-cols-2 gap-4 relative">
-            <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl hover:bg-white/10 transition-all hover:-translate-y-2">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-4 text-blue-400 text-2xl animate-float">🏥</div>
-              <h3 className="text-xl font-bold mb-2">Medical (MBBS)</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">Complete NEET guidance & college selection.</p>
-            </div>
+          <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl hover:bg-white/10 transition-all hover:-translate-y-2">
+  <div className="w-12 h-12 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-4 text-blue-400 text-2xl animate-float">🏥</div>
+  <h3 className="text-xl font-bold mb-2">B.ed/Deled</h3>
+  <p className="text-gray-400 text-sm leading-relaxed">Complete college guidance &  selection.</p>
+</div>
 
             <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl hover:bg-white/10 transition-all hover:-translate-y-2 mt-8">
               <div className="w-12 h-12 bg-[#F4B400]/20 rounded-2xl flex items-center justify-center mb-4 text-[#F4B400] text-2xl animate-float">⚙️</div>
