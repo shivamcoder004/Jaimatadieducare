@@ -59,7 +59,7 @@ useEffect(() => {
   {/* Logo Image */}
   <div className="relative">
     <Image
-      src="/jai_Mata_Di_educate.jpg"
+      src="/jai_Mata_Di_Educate.jpg"
       alt="Jai Mata Di Educare Logo"
       width={270}
       height={60}
