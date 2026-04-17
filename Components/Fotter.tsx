@@ -121,7 +121,7 @@ export default function Footer() {
                 <Mail size={20} className="text-orange-500 shrink-0" />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Email Us</p>
-                  <a href="mailto:dasynoma@gmail.com" className="hover:text-orange-400 transition-colors">dasynoma@gmail.com</a>
+                  <a href="mailto:jai@gmail.com" className="hover:text-orange-400 transition-colors">jai@gmail.com</a>
                 </div>
               </div>
 
@@ -129,7 +129,7 @@ export default function Footer() {
                 <Phone size={20} className="text-orange-500 shrink-0" />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Call Experts</p>
-                  <a href="tel:+917304455555" className="hover:text-orange-400 transition-colors">+918507948665</a>
+                  <a href="tel:+917304455555" className="hover:text-orange-400 transition-colors">+6207541303</a>
                 </div>
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function Footer() {
           </div>
 
           {/* DASYNOMA BRANDING SECTION */}
-          <motion.a 
+          {/* <motion.a 
             href="https://dasynoma.in" 
             target="_blank"
             rel="noopener noreferrer"
@@ -184,10 +184,11 @@ export default function Footer() {
             <div className="flex items-center gap-2">
                <span className="text-lg font-black tracking-tighter text-white">
                   DASY<span className="text-orange-500">NOMA</span>
+                  
                </span>
                <ExternalLink size={14} className="text-blue-100/40 group-hover:text-white" />
             </div>
-          </motion.a>
+          </motion.a> */}
         </div>
       </div>
     </footer>
