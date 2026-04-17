@@ -169,6 +169,7 @@ export default function Footer() {
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
              </p>
           </div>
+
           
 
           {/* DASYNOMA BRANDING SECTION */}
