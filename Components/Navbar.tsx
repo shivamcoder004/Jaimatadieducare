@@ -5,6 +5,7 @@ import Image from "next/image";
 import { courses} from "@/app/data/courseData";
 import { collegeData } from "@/app/data/collegeData";
 import CounsellingModal from "./CounsellingForm";
+import { usePathname } from "next/navigation";
 
 
 import { useState,useEffect } from "react";
@@ -27,7 +28,7 @@ export default function Navbar() {
   const [courseOpen, setCourseOpen] = useState(false);
   const [collegeOpen, setCollegeOpen] = useState(false);
   const [openCounselling, setOpenCounselling] = useState(false);
-
+const pathname = usePathname();
 
   // body scroll lock
 useEffect(() => {
@@ -38,6 +39,27 @@ useEffect(() => {
     }
   }, [mobileOpen]);
   
+// useEffect(() => {
+//   const timer = setTimeout(() => {
+//     setOpenCounselling(true);
+//   }, 2000); // 2 sec delay (optional)
+
+//   return () => clearTimeout(timer);
+// }, []);
+useEffect(() => {
+  // 👇 condition
+  if (pathname === "/" || pathname.startsWith("/course")|| pathname.startsWith("/contact") || pathname.startsWith("/about")) {
+
+    setOpenCounselling(false);
+
+    const timer = setTimeout(() => {
+      setOpenCounselling(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }
+
+}, [pathname]);
 
   return (
     
