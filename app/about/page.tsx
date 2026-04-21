@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import CounsellingModal from "@/Components/CounsellingForm";
 import { useState } from 'react';
-
+import { motion } from 'framer-motion';
 // --- Types ---
 interface FeatureCardProps {
   icon: string;
@@ -12,6 +12,82 @@ interface FeatureCardProps {
   description: string;
   className?: string;
 }
+
+
+
+
+
+
+
+const admissionProcessSteps = [
+  {
+    number: "01",
+    title: "Profile Assessment",
+    desc: "Hum aapke interests, marks aur budget ka analysis karte hain.",
+    icon: "📋",
+    color: "from-blue-500 to-cyan-400"
+  },
+  {
+    number: "02",
+    title: "College Shortlisting",
+    desc: "Aapke liye Best-Fit top colleges ki list prepare ki jati hai.",
+    icon: "🎓",
+    color: "from-orange-500 to-red-500"
+  },
+  {
+    number: "03",
+    title: "Document Verification",
+    desc: "Sare documents verify karte hain taaki admission mein koi rukawat na aaye.",
+    icon: "✅",
+    color: "from-purple-500 to-indigo-500"
+  },
+  {
+    number: "04",
+    title: "Final Admission",
+    desc: "Form filling se lekar seat allotment aur hostel tak ka pura support.",
+    icon: "🏢",
+    color: "from-emerald-500 to-teal-500"
+  }
+];
+
+// Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3, // Har step ke beech ka gap (0.3 seconds)
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // --- Components ---
 const FeatureCard = ({ icon, title, description, className }: FeatureCardProps) => (
@@ -61,12 +137,32 @@ export default function AboutPage() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-6 mt-8">
-              <button className="px-10 py-5 bg-slate-900 text-white rounded-[2rem] font-bold text-lg hover:bg-orange-600 transition-all shadow-2xl shadow-slate-300 active:scale-95">
+              {/* <button className="px-10 py-5 bg-slate-900 text-white rounded-[2rem] font-bold text-lg hover:bg-orange-600 transition-all shadow-2xl shadow-slate-300 active:scale-95">
                 Explore Our Process
-              </button>
-              <button className="px-10 py-5 bg-white text-slate-900 border-2 border-slate-100 rounded-[2rem] font-bold text-lg hover:border-orange-500 transition-all shadow-lg">
-                Talk to Founder
-              </button>
+              </button> */}
+             <a 
+  href="tel:+919876543210" 
+  className="px-10 py-5 bg-white text-slate-900 border-2 border-slate-100 rounded-[2rem] font-bold text-lg hover:border-orange-500 transition-all shadow-lg flex items-center gap-3 group"
+>
+  {/* Animated Phone Icon */}
+  <span className="bg-orange-100 p-2 rounded-full group-hover:bg-orange-500 group-hover:text-white transition-colors">
+    <svg 
+      width="20" 
+      height="20" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      className="animate-pulse"
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.27-2.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </span>
+  
+  Talk to Founder
+</a>
             </div>
           </div>
         </div>
@@ -150,27 +246,75 @@ export default function AboutPage() {
 </div>
 
     {/* Bottom Banner - Transparent Look */}
-    <div className="md:col-span-3">
-      <div className="relative p-[2px] rounded-[3rem] bg-gradient-to-r from-orange-500 via-red-500 to-yellow-500">
-        <div className="bg-white/90 backdrop-blur-xl p-8 md:p-10 rounded-[2.9rem] flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-6 flex-col md:flex-row text-center md:text-left">
-            <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center text-3xl shadow-inner">
-              🙏
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-3xl font-black text-slate-900 italic">
-                Mata Rani ki <span className="text-orange-600">Kripa.</span>
-              </h3>
-              <p className="text-slate-600 font-bold">Har student ko uske khwaab ke hisab se college milna chahiye.</p>
-            </div>
+   
+<div className="md:col-span-3">
+  <div className="relative group p-[2px] rounded-[3.5rem] bg-gradient-to-r from-slate-200 via-orange-500 to-slate-200 overflow-hidden">
+    
+    {/* Background Glow Effect */}
+    <div className="absolute inset-0 bg-gradient-to-r from-orange-600/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+    <div className="relative bg-white p-8 md:p-12 rounded-[3.4rem] flex flex-col lg:flex-row items-center justify-between gap-10">
+      
+      {/* Left: Dynamic Trust Meter */}
+      <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+        <div className="relative">
+          {/* Animated Ring */}
+          <div className="w-24 h-24 rounded-full border-4 border-slate-100 flex items-center justify-center relative">
+             <span className="text-4xl">🚀</span>
+             <svg className="absolute inset-0 w-full h-full -rotate-90">
+                <circle 
+                  cx="48" cy="48" r="44" 
+                  stroke="currentColor" 
+                  strokeWidth="4" 
+                  fill="transparent" 
+                  className="text-orange-500"
+                  strokeDasharray="276"
+                  strokeDashoffset="60" // Adjust for percentage look
+                />
+             </svg>
           </div>
-          <button className="w-full md:w-auto px-12 py-5 bg-slate-900 text-white rounded-2xl font-black text-lg hover:bg-orange-600 hover:scale-105 transition-all shadow-xl shadow-orange-200">
-            Join Us Now
-          </button>
+          {/* Badge */}
+          <div className="absolute -bottom-2 -right-2 bg-green-500 text-white text-[10px] font-black px-2 py-1 rounded-lg animate-bounce">
+            LIVE
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-3xl md:text-4xl font-black text-slate-900 leading-none">
+            Ready to <span className="text-orange-600">Secure</span> Your Seat?
+          </h3>
+          <div className="flex items-center justify-center md:justify-start gap-3">
+            <div className="flex -space-x-3">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold">👤</div>
+              ))}
+            </div>
+            <p className="text-slate-500 font-bold text-sm tracking-wide">
+              <span className="text-green-600 font-black">150+ Students</span> consulted in last 24h
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
+      {/* Right: Magnetic Action Button */}
+      <button 
+        onClick={() => setOpenCounselling(true)}
+        className="relative overflow-hidden group/btn w-full md:w-auto px-14 py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xl transition-all duration-300 hover:shadow-[0_20px_40px_-10px_rgba(234,88,12,0.5)] active:scale-95"
+      >
+        <span className="relative z-10 flex items-center justify-center gap-3">
+          START YOUR JOURNEY
+          <svg className="w-6 h-6 group-hover/btn:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </span>
+        
+        {/* Shimmer on Hover */}
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+      </button>
+
+    </div>
+  </div>
+</div>
   </div>
 </section>
 
@@ -281,6 +425,117 @@ export default function AboutPage() {
     </div>
   </div>
 </section>
+
+
+
+
+
+
+{/* --- ADMISSION PROCESS SECTION START --- */}
+<section className="py-24 px-6 bg-[#fafafa] overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Header Animation */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
+        >
+          <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6">
+            Kaise Hota Hai <br /> 
+            <span className="text-orange-600 italic">Admission?</span>
+          </h2>
+          <p className="text-slate-500 font-medium text-lg max-w-2xl mx-auto">
+            Hamara process simple aur transparent hai. Step-by-step janiye hum kaise aapko aapke dream college tak pahunchate hain.
+          </p>
+        </motion.div>
+
+        {/* Process Grid with Stagger Animation */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="relative grid grid-cols-1 md:grid-cols-4 gap-8"
+        >
+          
+          {/* Connector Line Animation */}
+          <motion.div 
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
+            style={{ originX: 0 }}
+            className="hidden md:block absolute top-[40%] left-0 w-full h-1 bg-slate-200 -translate-y-1/2 z-0"
+          >
+             <div className="h-full bg-gradient-to-r from-orange-500 to-red-500 w-full opacity-30"></div>
+          </motion.div>
+
+          {admissionProcessSteps.map((step, index) => (
+            <motion.div 
+              key={index} 
+              variants={itemVariants}
+              className="relative z-10 group"
+            >
+              <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-orange-200/60 transition-all duration-500 hover:-translate-y-3 h-full">
+                
+                {/* Step Number & Icon */}
+                <div className="flex justify-between items-start mb-6">
+                  <span className={`text-5xl font-black opacity-10 group-hover:opacity-100 transition-opacity duration-500 bg-clip-text text-transparent bg-gradient-to-br ${step.color}`}>
+                    {step.number}
+                  </span>
+                  <div className="text-4xl grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110">
+                    {step.icon}
+                  </div>
+                </div>
+
+                <h3 className="text-2xl font-bold text-slate-800 mb-3 group-hover:text-orange-600 transition-colors">
+                  {step.title}
+                </h3>
+                <p className="text-slate-600 leading-relaxed font-medium">
+                  {step.desc}
+                </p>
+
+                {/* Animated Bottom Bar */}
+                <div className={`mt-6 h-1.5 w-12 rounded-full bg-gradient-to-r ${step.color} group-hover:w-full transition-all duration-500`}></div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Bottom Tip Animation */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1, duration: 0.5 }}
+          className="mt-16 text-center"
+        >
+          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-orange-50 border border-orange-100 shadow-sm hover:scale-105 transition-transform duration-300 cursor-default">
+            <span className="text-orange-600 font-bold">Pro Tip:</span>
+            <span className="text-slate-700 font-medium">Earlier you start, higher the scholarship chances! 🚀</span>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+{/* --- ADMISSION PROCESS SECTION END --- */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       <footer className="py-12 text-center text-slate-400 font-bold uppercase tracking-[0.4em] text-xs">
         🚩 Victory Belong to Those Who Believe.

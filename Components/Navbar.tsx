@@ -81,12 +81,12 @@ useEffect(() => {
   {/* Logo Image */}
   <div className="relative">
     <Image
-      src="/jai_Mata_Di_Educate.jpg"
+      src="/future_focus.png"
       alt="Jai Mata Di Educare Logo"
-      width={270}
-      height={60}
+      width={290}
+      height={90}
       priority
-      className="h-9 sm:h-10 lg:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+      className="h-9 sm:h-10 lg:h-15 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
     />
   </div>
 
