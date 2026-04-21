@@ -1,5 +1,10 @@
+
+
+
 import { courses } from "@/app/data/courseData";
 import { notFound } from "next/navigation";
+import CounsellingModal from "@/Components/CounsellingForm";
+import ApplyNowButton from "@/Components/ApplyNowButton";
 
 // Next.js ko batana padega kaun kaun se pages exist karte hain
 export async function generateStaticParams() {
@@ -18,6 +23,8 @@ export default async function CoursePage({
   const { slug } = await params;
 
   const course = courses[slug as keyof typeof courses];
+   
+
 
   if (!course) return notFound();
 
@@ -95,83 +102,61 @@ export default async function CoursePage({
 
 
           {/* ================= TOP COLLEGES ================= */}
-          <section className="space-y-6">
-            <h2 className="text-3xl font-bold">Top Colleges</h2>
+         
+<section className="space-y-6">
+  <h2 className="text-3xl font-bold">Top Colleges</h2>
 
-            {/* College Card 1 */}
-            <div className="bg-white rounded-2xl shadow hover:shadow-xl transition p-6 border">
-              <h3 className="text-xl font-bold text-blue-900">
-                MIT ART, DESIGN AND TECHNOLOGY UNIVERSITY (MIT-ADT)
-              </h3>
-              <p className="text-gray-600">Pune, Maharashtra</p>
+  {course.colleges?.map((college, index) => (
+    <div
+      key={index}
+      className="bg-white rounded-2xl shadow hover:shadow-xl transition p-6 border"
+    >
+      <h3 className="text-xl font-bold text-blue-900">
+        {college.name}
+      </h3>
 
-              <div className="grid md:grid-cols-2 gap-4 mt-4 text-sm">
+      <p className="text-gray-600">{college.location}</p>
 
-                <div>
-                  <p className="font-semibold">Study Programs</p>
-                  <p>132 Courses</p>
-                </div>
+      <div className="grid md:grid-cols-2 gap-4 mt-4 text-sm">
+        <div>
+          <p className="font-semibold">Study Programs</p>
+          <p>{college.programs}</p>
+        </div>
 
-                <div>
-                  <p className="font-semibold">Entrance Exams</p>
-                  <p>JEE-Main / NATA</p>
-                </div>
+        <div>
+          <p className="font-semibold">Entrance Exams</p>
+          <p>{college.exams}</p>
+        </div>
 
-                <div>
-                  <p className="font-semibold">Fee Range</p>
-                  <p>₹7,000 - ₹8,00,000</p>
-                </div>
+        <div>
+          <p className="font-semibold">Fee Range</p>
+          <p>{college.fees}</p>
+        </div>
 
-                <div>
-                  <p className="font-semibold">Ranking</p>
-                  <p>--</p>
-                </div>
+        <div>
+          <p className="font-semibold">Ranking</p>
+          <p>{college.ranking}</p>
+        </div>
+      </div>
 
-              </div>
+      {/* <button 
 
-              <button className="mt-5 bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-orange-600">
-                Apply Now
-              </button>
-            </div>
+      className="mt-5 bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-orange-600">
+        Apply Now
+      </button> */}
+      <ApplyNowButton />
+    </div>
+  ))}
+</section>
 
 
-            {/* College Card 2 */}
-            <div className="bg-white rounded-2xl shadow hover:shadow-xl transition p-6 border">
-              <h3 className="text-xl font-bold text-blue-900">
-                BHARATI VIDYAPEETH DEEMED UNIVERSITY (BVP)
-              </h3>
-              <p className="text-gray-600">Pune, Maharashtra</p>
 
-              <div className="grid md:grid-cols-2 gap-4 mt-4 text-sm">
 
-                <div>
-                  <p className="font-semibold">Study Programs</p>
-                  <p>24 Courses</p>
-                </div>
 
-                <div>
-                  <p className="font-semibold">Entrance Exams</p>
-                  <p>BVP Exam / NATA</p>
-                </div>
 
-                <div>
-                  <p className="font-semibold">Fee Range</p>
-                  <p>₹56,000 - ₹1,60,000</p>
-                </div>
 
-                <div>
-                  <p className="font-semibold">Ranking</p>
-                  <p>--</p>
-                </div>
 
-              </div>
 
-              <button className="mt-5 bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-orange-600">
-                Apply Now
-              </button>
-            </div>
-
-          </section>
         </div>
 
 

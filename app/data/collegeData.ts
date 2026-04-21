@@ -162,5 +162,53 @@ export const collegeData = {
       },
     },
   },
+
+
+  paramedical: {
+  title: "Paramedical Colleges in India",
+  intro:
+    "Paramedical courses are great career options in the healthcare sector. Many private colleges offer direct admission without entrance exams.",
+
+  colleges: {
+    "galgotias-paramedical": {
+      name: "Galgotias University",
+      location: "Greater Noida",
+      about:
+        "Galgotias University offers various paramedical courses with modern labs and hospital training facilities.",
+      courses: "B.Sc Nursing, BMLT, BPT",
+      fees: "₹80,000 – ₹1,50,000 per year",
+      eligibility: "12th PCB",
+      placement: "Hospital tie-ups & internships",
+      hostel: "Hostel available",
+      admission: "Direct admission based on 12th marks",
+    },
+
+    "sharda-paramedical": {
+      name: "Sharda University",
+      location: "Greater Noida",
+      about:
+        "Sharda University provides quality paramedical education with clinical exposure in its own hospital.",
+      courses: "B.Sc Nursing, BMLT, Radiology",
+      fees: "₹1,00,000 – ₹2,00,000 per year",
+      eligibility: "12th PCB",
+      placement: "Hospital training & placements",
+      hostel: "Available",
+      admission: "Direct admission + interview",
+    },
+
+    "amity-paramedical": {
+      name: "Amity University",
+      location: "Noida",
+      about:
+        "Amity offers advanced paramedical courses with modern infrastructure and industry exposure.",
+      courses: "BMLT, BPT, B.Sc Nursing",
+      fees: "₹1,20,000 – ₹2,50,000 per year",
+      eligibility: "12th PCB",
+      placement: "90%",
+      hostel: "Available",
+      admission: "Direct admission based on merit",
+    },
+  },
+}
   };
   

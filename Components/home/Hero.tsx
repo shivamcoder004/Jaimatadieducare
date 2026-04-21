@@ -23,7 +23,7 @@ export default function Hero() {
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-white">
-  Jai Mata Di <span className="text-orange-500">Educare</span> <br />
+  Future <span className="text-orange-500">Focus</span> <br />
   <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F4D03F] to-orange-500">
     Shaping Successful Careers
   </span>
@@ -40,7 +40,7 @@ export default function Hero() {
               Get Free Consultation
             </button>
             <Link
-              href="https://wa.me/8507948665"
+              href="https://wa.me/8409463997"
               className="group border border-white/20 hover:bg-white/5 px-8 py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2"
             >
               WhatsApp Now

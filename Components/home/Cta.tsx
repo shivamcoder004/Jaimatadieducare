@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function CTASection() {
   return (
@@ -58,29 +59,31 @@ export default function CTASection() {
           </h2>
 
           <p className="text-blue-100 text-lg md:text-xl mb-10 leading-relaxed font-light">
-            Join lakhs of students who trust <span className="font-bold text-white underline decoration-yellow-400 decoration-2 underline-offset-4">Jai Mata Di Educare</span> for their college and course selection.
+            Join lakhs of students who trust <span className="font-bold text-white underline decoration-yellow-400 decoration-2 underline-offset-4">Future Focus</span> for their college and course selection.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             {/* Search Button */}
-            <motion.button 
+            {/* <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="w-full sm:w-auto px-10 py-4 bg-yellow-400 border-2 border-yellow-400 text-[#003d66] rounded-xl font-bold text-lg hover:bg-yellow-300 hover:border-yellow-300 transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg"
             >
               Search Now 
               <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </motion.button>
+            </motion.button> */}
 
             {/* Contact Button */}
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full sm:w-auto px-10 py-4 bg-transparent border-2 border-white text-white rounded-xl font-bold text-lg hover:bg-white hover:text-[#003d66] transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg"
-            >
-              Contact Us
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </motion.button>
+          <Link href="/contact">
+  <motion.button 
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="w-full sm:w-auto px-10 py-4 bg-transparent border-2 border-white text-white rounded-xl font-bold text-lg hover:bg-white hover:text-[#003d66] transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg"
+  >
+    Contact Us
+    <span className="group-hover:translate-x-1 transition-transform">→</span>
+  </motion.button>
+</Link>
           </div>
         </div>
 

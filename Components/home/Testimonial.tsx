@@ -86,7 +86,7 @@ export default function TestimonialSection() {
           <div className="text-left">
             <div className="flex items-center gap-2 mb-2">
                 <span className="h-[2px] w-8 bg-emerald-700"></span>
-                <p className="text-emerald-800 font-bold text-xs tracking-[0.3em] uppercase">Jai Mata Di <span className='text-amber-300'>Educare</span></p>
+                <p className="text-emerald-800 font-bold text-xs tracking-[0.3em] uppercase">Future <span className='text-amber-300'>Focus</span></p>
             </div>
             <h2 className="text-4xl md:text-6xl font-serif text-slate-900">Student <span className="text-emerald-700 italic">Success Stories</span></h2>
             <p className="text-slate-500 mt-3 font-medium max-w-md">Real experiences from students who found their dream campus with Educare Ho.</p>

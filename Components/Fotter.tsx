@@ -21,17 +21,17 @@ export default function Footer() {
   const footerLinks = {
     quickLinks: [
       { name: "About Us", href: "/about" },
-      { name: "Browse Colleges", href: "/colleges" },
-      { name: "Latest Updates", href: "/updates" },
+      // { name: "Browse Colleges", href: "/colleges" },
+      // { name: "Latest Updates", href: "/updates" },
       { name: "Terms & Conditions", href: "/terms" },
       { name: "Privacy & Policy", href: "/privacy" },
-      { name: "Disclaimer", href: "/disclaimer" },
+      // { name: "Disclaimer", href: "/disclaimer" },
     ],
     categories: [
       { name: "Engineering Admissions", href: "/category/engineering" },
       { name: "Medical (NEET) Guidance", href: "/category/medical" },
       { name: "Management (MBA) Experts", href: "/category/management" },
-      { name: "Arts & Humanities", href: "/category/arts" },
+      // { name: "Arts & Humanities", href: "/category/arts" },
       { name: "Science Streams", href: "/category/science" },
     ]
   };
@@ -53,7 +53,7 @@ export default function Footer() {
                 <GraduationCap size={28} className="text-white" />
               </div>
               <h2 className="text-2xl font-black tracking-tighter uppercase">
-                JAI MATA DI <span className="text-orange-500 underline decoration-2">EDUCARE</span>
+                Future  <span className="text-orange-500 underline decoration-2">  Focus</span>
               </h2>
             </div>
             <p className="text-blue-100/70 text-sm leading-relaxed italic">
@@ -112,8 +112,8 @@ export default function Footer() {
                 <MapPin size={20} className="text-orange-500 shrink-0 mt-1" />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Our Office</p>
-                  <p>Madhubani Chowk, Motihari,</p>
-                  <p>Bihar - 845401</p>
+                  <p>Old sipahi tola near canera bank atm </p>
+                  <p>Purnea (Bihar) - 845401</p>
                 </div>
               </div>
 
@@ -129,7 +129,7 @@ export default function Footer() {
                 <Phone size={20} className="text-orange-500 shrink-0" />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Call Experts</p>
-                  <a href="tel:+917304455555" className="hover:text-orange-400 transition-colors">8507948665</a>
+                  <a href="tel:+917304455555" className="hover:text-orange-400 transition-colors">8409463997</a>
                 </div>
               </div>
             </div>
@@ -163,7 +163,7 @@ export default function Footer() {
         {/* Bottom Bar with Dasynoma Credits */}
         <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-xs text-blue-100/50 text-center md:text-left">
-             <p>© {currentYear} Jai Mata Di Educare. All rights reserved.</p>
+             <p>© {currentYear} Future Focus Education Consultancy. All rights reserved.</p>
              <p className="mt-1 flex items-center justify-center md:justify-start gap-2">
                 Made with ❤️ for Indian Students 
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>

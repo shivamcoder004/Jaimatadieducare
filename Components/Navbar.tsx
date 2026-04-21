@@ -94,11 +94,11 @@ useEffect(() => {
   <div className="flex flex-col leading-tight">
 
     <span className="text-[10px] sm:text-xs tracking-[2px] text-orange-500 font-semibold uppercase">
-      Jai Mata Di
+     Future
     </span>
 
     <span className="text-lg sm:text-xl lg:text-2xl font-extrabold text-blue-900 group-hover:text-orange-500 transition-colors duration-300">
-      Educare
+      Focus
     </span>
 
   </div>

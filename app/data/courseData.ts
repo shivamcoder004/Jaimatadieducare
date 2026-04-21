@@ -1,5 +1,6 @@
 interface course {
   title: string;
+  category:string;
   intro: string;
   eligibility: string;
   entrance: string;
@@ -13,6 +14,7 @@ interface course {
 export const courses = {
   "btech": {
     title: "B.Tech",
+    category: "engineering",
     intro: "Bachelor of Technology (B.Tech) is a 4-year undergraduate professional engineering course. It is one of the most popular choices for students who have completed 12th with PCM.",
     eligibility: "12th Pass with Physics, Chemistry, and Mathematics (PCM).",
     entrance: "JEE-Main, MHT-CET, WBJEE, BITSAT.",
@@ -38,8 +40,10 @@ export const courses = {
       }
     ]
   },
-  "medical": {
+  "mbbs": {
     title: "Medical (MBBS)",
+        category: "medical",
+
     intro: "MBBS is a 5.5-year undergraduate medical degree. It is the dream of every medical aspirant to become a doctor and serve the nation.",
     eligibility: "12th Pass with Physics, Chemistry, and Biology (PCB).",
     entrance: "NEET-UG is the mandatory national level exam.",
@@ -58,6 +62,7 @@ export const courses = {
   },
   "bsc": {
     title: "B.Sc (Bachelor of Science)",
+    category:"science",
     intro: "B.Sc is a 3-year undergraduate degree for students interested in scientific theory and research. It offers various specializations like IT, Biotech, and Nursing.",
     eligibility: "12th Pass in Science Stream (PCM/PCB).",
     entrance: "CUET, State-level entrance, or Merit Based.",
@@ -76,6 +81,7 @@ export const courses = {
   },
   "mba": {
     title: "MBA (Master of Business Administration)",
+    category:"management",
     intro: "MBA is a 2-year postgraduate program designed to develop skills in business and management. It is highly valued for career growth in the corporate sector.",
     eligibility: "Bachelor's degree in any discipline with minimum 50% marks.",
     entrance: "CAT, MAT, XAT, SNAP, MAH-CET.",
@@ -103,6 +109,7 @@ export const courses = {
   },
   "law": {
     title: "Integrated Law (B.A. LL.B.)",
+    category:"law",
     intro: "An integrated 5-year undergraduate program that combines arts and legal studies. It is the foundation for a career in the judiciary and legal consultancy.",
     eligibility: "12th Pass in any stream with minimum 45% marks.",
     entrance: "CLAT, AILET, MH-CET Law.",
@@ -121,6 +128,7 @@ export const courses = {
   },
   "bca": {
     title: "BCA (Bachelor of Computer Applications)",
+    category:"engineering",
     intro: "BCA is a 3-year undergraduate course for students who want to delve into the world of computer languages and software development.",
     eligibility: "12th Pass in any stream (Maths preferred in some colleges).",
     entrance: "IPU CET, CUET, Merit-Based, State Entrances.",
@@ -136,5 +144,47 @@ export const courses = {
         ranking: "Best BCA College in India"
       }
     ]
-  }
+  },
+  "bcom-llb": {
+  title: "Integrated Law (B.Com LL.B.)",
+  category:"law",
+  intro:
+    "B.Com LL.B. is a 5-year integrated law program that combines commerce subjects like accounting, business law, and taxation with legal studies. It is ideal for students interested in corporate law and business legal practices.",
+
+  eligibility: "12th Pass (Commerce preferred) with minimum 45% marks.",
+  
+  entrance: "CLAT, LSAT India, AILET, State Law Entrance Exams.",
+  
+  fees: "₹3,00,000 - ₹10,00,000",
+  
+  scope:
+    "Corporate Lawyer, Tax Consultant, Legal Advisor, Company Secretary, Banking & Finance Legal Expert, and Business Consultant.",
+
+  colleges: [
+    {
+      name: "Narsee Monjee Institute of Management Studies (NMIMS)",
+      location: "Mumbai, Maharashtra",
+      programs: "B.Com LL.B.",
+      exams: "NMIMS LAT",
+      fees: "₹3,50,000 per year",
+      ranking: "Top Private Law Colleges in India"
+    },
+    {
+      name: "UPES School of Law",
+      location: "Dehradun, Uttarakhand",
+      programs: "B.Com LL.B. (Hons)",
+      exams: "UPES Entrance / CLAT",
+      fees: "₹2,50,000 per year",
+      ranking: "Top Emerging Law School"
+    },
+    {
+      name: "ICFAI Law School",
+      location: "Hyderabad, Telangana",
+      programs: "B.Com LL.B.",
+      exams: "ICFAI Law Admission Test",
+      fees: "₹1,50,000 per year",
+      ranking: "Top Private Law College"
+    }
+  ]
+}
 };

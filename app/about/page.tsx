@@ -44,7 +44,7 @@ export default function AboutPage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-600"></span>
               </span>
-              <span className="text-sm font-black text-slate-700 tracking-[0.2em] uppercase">Jai Mata Di Educare</span>
+              <span className="text-sm font-black text-slate-700 tracking-[0.2em] uppercase">Future Focus</span>
             </div>
 
             <h1 className="text-6xl md:text-[110px] font-black leading-[0.9] tracking-tighter text-slate-900">

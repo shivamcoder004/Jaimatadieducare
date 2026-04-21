@@ -10,6 +10,8 @@ import {
   Leaf,
   ChevronLeft,
   ChevronRight
+  ,
+  BookOpenText
 } from "lucide-react";
 
 const services = [
@@ -20,20 +22,21 @@ const services = [
     color: "from-emerald-400 to-teal-600",
     bgText: "ENGG"
   },
+   {
+    title: "Teaching Admissions",
+    description: "Guidance for B.ED ,D.EL.ED admission.",
+    icon: <BookOpenText className="w-8 h-8 text-white" />,
+    color: "from-sky-400 to-blue-600",
+    bgText: "INTL"
+  },
   {
     title: "Medical Admissions",
-    description: "MBBS, BDS, BAMS, BHMS guidance for top colleges.",
+    description: "B.pharm ,BPT , ,MBBS, BDS, BAMS, BHMS guidance for top colleges.",
     icon: <Stethoscope className="w-8 h-8 text-white" />,
     color: "from-rose-400 to-red-600",
     bgText: "MED"
   },
-  {
-    title: "Study Abroad",
-    description: "Guidance for UK, USA, Canada, Australia admission.",
-    icon: <Globe className="w-8 h-8 text-white" />,
-    color: "from-sky-400 to-blue-600",
-    bgText: "INTL"
-  },
+ 
   {
     title: "MBA & Management",
     description: "MBA, PGDM, BBA counselling with top institutes.",
@@ -47,6 +50,13 @@ const services = [
     icon: <Book className="w-8 h-8 text-white" />,
     color: "from-violet-400 to-purple-600",
     bgText: "GROW"
+  },
+   {
+    title: "Study Abroad",
+    description: "Guidance for UK, USA, Canada, Australia admission.",
+    icon: <Globe className="w-8 h-8 text-white" />,
+    color: "from-sky-400 to-blue-600",
+    bgText: "INTL"
   },
 ];
 
@@ -180,9 +190,9 @@ const scroll = (direction: 'left' | 'right') => {
         {service.description}
       </p>
 
-      <button className="relative z-10 w-full py-3 px-4 rounded-xl bg-slate-900 text-white font-bold text-[10px] uppercase tracking-widest transition-all hover:bg-teal-600 hover:shadow-lg active:scale-95">
+      {/* <button className="relative z-10 w-full py-3 px-4 rounded-xl bg-slate-900 text-white font-bold text-[10px] uppercase tracking-widest transition-all hover:bg-teal-600 hover:shadow-lg active:scale-95">
         Explore Details
-      </button>
+      </button> */}
     </div>
   ))}
 </div>

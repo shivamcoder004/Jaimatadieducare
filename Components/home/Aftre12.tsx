@@ -1,34 +1,62 @@
+
+"use client";
 import React from 'react';
 import Link from 'next/link';
+import CounsellingModal from "@/Components/CounsellingForm";
+import { useState,useEffect } from "react";
+
 
 // --- Types ---
 interface CourseCategory {
   title: string;
+  slug: string;
   courses: string[];
   icon: string;
   color: string;
 }
 
+// const coursesAfter12th: CourseCategory[] = [
+//   { title: "Engineering", courses: ["B.Tech", "BE"], icon: "⚙️", color: "bg-blue-50/90 text-blue-700 border-blue-200" },
+//   { title: "Medical", courses: ["MBBS", "BDS", "BAMS", "BHMS"], icon: "🩺", color: "bg-red-50/90 text-red-700 border-red-200" },
+//   { title: "Management", courses: ["BBA", "BMS"], icon: "💼", color: "bg-amber-50/90 text-amber-700 border-amber-200" },
+//   { title: "Law", courses: ["BA-LLB", "BBA-LLB", "B.Com-LLB", "B.Sc-LLB"], icon: "⚖️", color: "bg-purple-50/90 text-purple-700 border-purple-200" },
+//   { title: "Architecture", courses: ["B.Arch", "B.Planning"], icon: "🏗️", color: "bg-emerald-50/90 text-emerald-700 border-emerald-200" },
+//   { title: "Pharmacy", courses: ["B.Pharma", "D.Pharma", "Pharma-D"], icon: "💊", color: "bg-lime-50/90 text-lime-700 border-lime-200" },
+//   { title: "Design", courses: ["B.Des"], icon: "🎨", color: "bg-fuchsia-50/90 text-fuchsia-700 border-fuchsia-200" },
+//   { title: "Paramedical", courses: ["BPT", "B.Optom", "B.Sc. Radio"], icon: "🚑", color: "bg-sky-50/90 text-sky-700 border-sky-200" },
+// ];
+
+
+
 const coursesAfter12th: CourseCategory[] = [
-  { title: "Engineering", courses: ["B.Tech", "BE"], icon: "⚙️", color: "bg-blue-50/90 text-blue-700 border-blue-200" },
-  { title: "Medical", courses: ["MBBS", "BDS", "BAMS", "BHMS"], icon: "🩺", color: "bg-red-50/90 text-red-700 border-red-200" },
-  { title: "Management", courses: ["BBA", "BMS"], icon: "💼", color: "bg-amber-50/90 text-amber-700 border-amber-200" },
-  { title: "Law", courses: ["BA-LLB", "BBA-LLB", "B.Com-LLB", "B.Sc-LLB"], icon: "⚖️", color: "bg-purple-50/90 text-purple-700 border-purple-200" },
-  { title: "Architecture", courses: ["B.Arch", "B.Planning"], icon: "🏗️", color: "bg-emerald-50/90 text-emerald-700 border-emerald-200" },
-  { title: "Pharmacy", courses: ["B.Pharma", "D.Pharma", "Pharma-D"], icon: "💊", color: "bg-lime-50/90 text-lime-700 border-lime-200" },
-  { title: "Design", courses: ["B.Des"], icon: "🎨", color: "bg-fuchsia-50/90 text-fuchsia-700 border-fuchsia-200" },
-  { title: "Paramedical", courses: ["BPT", "B.Optom", "B.Sc. Radio"], icon: "🚑", color: "bg-sky-50/90 text-sky-700 border-sky-200" },
+  { title: "Engineering", slug: "engineering", courses: ["B.Tech", "BE"], icon: "⚙️", color: "bg-blue-50/90 text-blue-700 border-blue-200" },
+  
+  { title: "Medical", slug: "medical", courses: ["MBBS", "BDS", "BAMS", "BHMS"], icon: "🩺", color: "bg-red-50/90 text-red-700 border-red-200" },
+  
+  { title: "Management", slug: "management", courses: ["BBA", "BMS"], icon: "💼", color: "bg-amber-50/90 text-amber-700 border-amber-200" },
+  
+  { title: "Law", slug: "law", courses: ["BA-LLB", "BBA-LLB", "B.Com-LLB", "B.Sc-LLB"], icon: "⚖️", color: "bg-purple-50/90 text-purple-700 border-purple-200" },
 ];
 
+
+
+
 export default function After12thPage() {
+    const [openCounselling, setOpenCounselling] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#f8fafc] relative overflow-hidden font-sans">
+      <CounsellingModal open={openCounselling} setOpen={setOpenCounselling} />
+
       
       {/* 1. DIAGONAL WATERMARK LAYER */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] rotate-[-12deg] scale-125 flex flex-col gap-12 select-none">
         {[...Array(10)].map((_, i) => (
-          <div key={i} className="whitespace-nowrap text-6xl md:text-8xl font-black tracking-tighter text-indigo-900">
-            JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE 
+          // <div key={i} className="whitespace-nowrap text-6xl md:text-8xl font-black tracking-tighter text-indigo-900">
+          //   JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE 
+          // </div>
+           <div key={i} className="whitespace-nowrap text-6xl md:text-8xl font-black tracking-tighter text-indigo-900">
+            Future Focus education consultancy • Future Focus education consultancy •Future Focus education consultancy •
           </div>
         ))}
       </div>
@@ -97,9 +125,11 @@ export default function After12thPage() {
                 ))}
               </ul>
               
-              <button className="w-full py-2.5 bg-white border border-current/20 rounded-xl text-[9px] md:text-[11px] font-black uppercase tracking-widest transition-all group-hover:bg-indigo-600 group-hover:text-white group-hover:border-transparent active:scale-95 shadow-sm">
-                Details
-              </button>
+           <Link href={`/category/${category.slug}`}>
+  <button className="w-full py-2.5 bg-white border border-current/20 rounded-xl text-[9px] md:text-[11px] font-black uppercase tracking-widest transition-all group-hover:bg-indigo-600 group-hover:text-white group-hover:border-transparent active:scale-95 shadow-sm">
+    Details
+  </button>
+</Link>
             </div>
           ))}
         </div>
@@ -108,13 +138,13 @@ export default function After12thPage() {
         <div className="mt-2 flex flex-col items-center justify-center gap-6">
            <div className="h-px w-24 bg-slate-200"></div>
            <p className="text-slate-500 font-bold text-xs uppercase tracking-[0.2em]">Have questions? We are here</p>
-           <button className="group relative flex items-center gap-4 bg-slate-900 text-white px-8 md:px-12 py-4 md:py-6 rounded-2xl md:rounded-3xl transition-all hover:bg-indigo-600 hover:shadow-2xl hover:shadow-indigo-200 active:scale-95">
-              <span className="text-sm md:text-lg font-black uppercase tracking-widest">Get In Touch</span>
-              <div className="h-8 w-8 md:h-10 md:w-10 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                <span className="text-xl group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-           </button>
-           <p className="text-[10px] font-bold text-slate-400 italic">Jai Mata Di | Educare</p>
+        <button
+  onClick={() => setOpenCounselling(true)}
+  className="group relative flex items-center gap-4 bg-slate-900 text-white px-8 py-4 rounded-2xl"
+>
+  Get In Touch →
+</button>
+           <p className="text-[10px] font-bold text-slate-400 italic">Future | Focus</p>
         </div>
       </main>
     </div>
