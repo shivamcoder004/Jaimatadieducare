@@ -20,6 +20,7 @@ import { Menu, X, ChevronDown, User, Home,
     Phone,
     UserPlus,
     LogIn,
+    Briefcase,
     ChevronRight } from "lucide-react";
 
 export default function Navbar() {
@@ -351,8 +352,11 @@ useEffect(() => {
       <Info size={20} className="text-blue-600"/>
       About
     </Link>
-              <Link href="/Job" className="hover:text-orange-500 transition">JOb</Link>
-
+ <Link onClick={()=>setMobileOpen(false)} href="/Job"
+      className="flex items-center gap-3 text-lg hover:text-orange-500 transition">
+      <Briefcase size={20} className="text-blue-600"/>
+      Job
+    </Link>
 
     {/* Contact */}
     <Link onClick={()=>setMobileOpen(false)} href="/contact"

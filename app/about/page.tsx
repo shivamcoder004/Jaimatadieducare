@@ -325,7 +325,7 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-orange-600 rounded-[4rem] rotate-3 group-hover:rotate-0 transition-all duration-700"></div>
             <div className="relative aspect-[4/5] bg-slate-200 rounded-[4rem] overflow-hidden border-4 border-white shadow-2xl">
                <img 
-                 src="/Jai_mata_di_educatee.jpg" 
+                 src="/futurefoucusowner.png" 
                  alt="Founder" 
                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                />
