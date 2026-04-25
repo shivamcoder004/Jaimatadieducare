@@ -82,7 +82,7 @@ useEffect(() => {
   <div className="relative">
     <Image
       src="/future_focus.png"
-      alt="Jai Mata Di Educare Logo"
+      alt="Future Focus Logo"
       width={290}
       height={90}
       priority
@@ -188,6 +188,8 @@ useEffect(() => {
           </div>
 
           <Link href="/about" className="hover:text-orange-500 transition">About</Link>
+          <Link href="/Job" className="hover:text-orange-500 transition">JOb</Link>
+
           <Link href="/contact" className="hover:text-orange-500 transition">Contact</Link>
         </nav>
 
@@ -349,6 +351,8 @@ useEffect(() => {
       <Info size={20} className="text-blue-600"/>
       About
     </Link>
+              <Link href="/Job" className="hover:text-orange-500 transition">JOb</Link>
+
 
     {/* Contact */}
     <Link onClick={()=>setMobileOpen(false)} href="/contact"

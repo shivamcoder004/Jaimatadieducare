@@ -5,7 +5,36 @@ import Image from "next/image"; // Agar image use karni ho toh
 
 export default function Hero() {
   return (
+<>
+    {/* Sticky Bar Code */}
+<div className="sticky top-0 z-[100] w-full bg-[#F4B400] py-2 overflow-hidden border-b border-black/10">
+  <div className="flex whitespace-nowrap animate-marquee-fast">
+    <div className="flex gap-10 items-center">
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <span key={i} className="text-black font-bold text-sm flex items-center gap-2">
+          <span className="text-lg">★</span> 100% PLACEMENT SUPPORT 
+          <span className="text-lg">★</span> ADMISSIONS OPEN 2026-27 
+          <span className="text-lg">★</span> TOP COLLEGES ONLY
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
+
+{/* Correct way to write Style in Next.js JSX */}
+<style dangerouslySetInnerHTML={{ __html: `
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee-fast {
+    display: flex;
+    animation: marquee 20s linear infinite;
+  }
+`}} />
+    
     <section className="relative min-h-[90vh] lg:min-h-screen flex items-center bg-[#0a1425] text-white overflow-hidden">
+      
       {/* Background Glows */}
       <div className="absolute top-0 right-0 w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-blue-600/10 blur-[100px] rounded-full" />
       <div className="absolute bottom-0 left-0 w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-[#F4B400]/5 blur-[100px] rounded-full" />
@@ -205,5 +234,7 @@ export default function Hero() {
         }
       `}</style>
     </section>
+
+    </>
   );
 }

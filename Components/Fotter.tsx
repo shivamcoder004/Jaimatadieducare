@@ -121,7 +121,7 @@ export default function Footer() {
                 <Mail size={20} className="text-orange-500 shrink-0" />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Email Us</p>
-                  <a href="mailto:jai@gmail.com" className="hover:text-orange-400 transition-colors">jai@gmail.com</a>
+                  <a href="mailto:jai@gmail.com" className="hover:text-orange-400 transition-colors">sewaskyfoundation@gmail.com</a>
                 </div>
               </div>
 
@@ -155,7 +155,7 @@ export default function Footer() {
   <span>Top Engineering Colleges Bihar</span> •
   <span>Career Counselling after 12th</span> •
   <span>Direct Admission Guidance</span> •
-  <span>Jai Mata Di Education Services</span>
+  <span>Future focus Education Services</span>
 
 </div>
         </div>

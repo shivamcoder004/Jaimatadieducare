@@ -165,7 +165,7 @@ export default function TestimonialSection() {
             className="relative bg-white w-full max-w-lg p-10 rounded-[2rem] shadow-2xl z-10 border-t-8 border-emerald-800"
           >
             <h3 className="text-3xl font-serif mb-1 text-slate-900">Submit Your Story</h3>
-            <p className="text-emerald-700 text-xs font-bold mb-8 tracking-widest uppercase">Jai Mata Di • Helping others decide</p>
+            <p className="text-emerald-700 text-xs font-bold mb-8 tracking-widest uppercase">Future Focus • Helping others decide</p>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

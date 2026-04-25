@@ -29,9 +29,9 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
 
 // Update these to match your actual college names from the image
 const COLLEGES = [
-  { id: 1, name: "BABA FARID", logo: "/jai_Mata_Di_Educare.jpg" },
-  { id: 2, name: "GURU KASHI UNIVERSITY", logo: "" },
-  { id: 3, name: "RIT ROORKEE", logo: "" },
+  { id: 1, name: "BABA FARID", logo: "/future_focus.jpeg" },
+  { id: 2, name: "GURU KASHI UNIVERSITY", logo: "/Gurukashi.png" },
+  { id: 3, name: "RIT ROORKEE", logo: "/rit.png" },
   { id: 4, name: "SHRI RAM", logo: "" },
   { id: 5, name: "TULA'S INSTITUTE", logo: "" },
   { id: 6, name: "JAIPUR NATIONAL UNIVERSITY", logo: "" },
@@ -113,9 +113,9 @@ const FeaturedColleges = () => {
               className="flex flex-col items-center justify-center p-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl min-w-[200px] md:min-w-[280px] hover:bg-white/20 transition-all group"
             >
               {/* Logo Placeholder - Container looks like the image */}
-              <div className="w-32 h-32 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center p-3 mb-4 shadow-inner overflow-hidden group-hover:scale-110 transition-transform duration-500">
+              <div className="w-32 h-32 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center  mb-4 shadow-inner overflow-hidden group-hover:scale-110 transition-transform duration-500">
                 {college.logo ? (
-                    <img src={college.logo} alt={college.name} className="w-full h-full object-contian" />
+                    <img src={college.logo} alt={college.name} className="w-full h-full object-cover " />
                 ) : (
                     <div className="text-[#F9A825] font-black text-xl">{college.name.charAt(0)}</div>
                 )}
