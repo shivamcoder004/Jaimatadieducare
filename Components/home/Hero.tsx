@@ -6,6 +6,7 @@ import Image from "next/image"; // Agar image use karni ho toh
 export default function Hero() {
   return (
 <>
+
     {/* Sticky Bar Code */}
 <div className="sticky top-0  w-full bg-[#F4B400] py-2 overflow-hidden border-b border-black/10">
   <div className="flex whitespace-nowrap animate-marquee-fast">
