@@ -7,7 +7,7 @@ export default function Hero() {
   return (
 <>
     {/* Sticky Bar Code */}
-<div className="sticky top-0 z-[100] w-full bg-[#F4B400] py-2 overflow-hidden border-b border-black/10">
+<div className="sticky top-0  w-full bg-[#F4B400] py-2 overflow-hidden border-b border-black/10">
   <div className="flex whitespace-nowrap animate-marquee-fast">
     <div className="flex gap-10 items-center">
       {[1, 2, 3, 4, 5, 6].map((i) => (

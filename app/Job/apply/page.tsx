@@ -19,7 +19,7 @@ export default function ApplyJobPage() {
           <div className="text-6xl mb-6">✅</div>
           <h2 className="text-3xl font-bold text-white mb-4">Application Sent!</h2>
           <p className="text-gray-400 mb-8">Humari team aapki profile review karke 24-48 hours mein contact karegi.</p>
-          <Link href="/jobs" className="bg-[#F4B400] text-black px-8 py-3 rounded-xl font-bold hover:scale-105 transition-all inline-block">
+          <Link href="/Job" className="bg-[#F4B400] text-black px-8 py-3 rounded-xl font-bold hover:scale-105 transition-all inline-block">
             Back to Jobs
           </Link>
         </div>

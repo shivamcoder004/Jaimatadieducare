@@ -6,7 +6,7 @@ export const categories = {
   },
   medical: {
     title: "Medical",
-    courses: ["mbbs","bsc"]
+    courses: ["mbbs",]
   },
   management: {
     title: "Management",
@@ -18,6 +18,6 @@ export const categories = {
   },
   science:{
     title:"science",
-    courses:["bsc"]
+    courses:["f"]
   }
 };

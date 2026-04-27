@@ -12,7 +12,13 @@ const JOBS_DATA = [
     location: "Bangalore / Remote",
     salary: "₹6 - ₹12 LPA",
     type: "Full-Time",
-    category: "Engineering"
+    category: "Engineering",
+    elegibility:"fresher",
+    skillrequired:"good communication ",
+    jobtiming:"9.30 to 6.30",
+    jobdescription:"tech",
+    qualification:"btech",
+    
   },
   {
     id: 2,
