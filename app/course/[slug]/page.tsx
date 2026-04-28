@@ -1,33 +1,101 @@
 
+"use client";
+
+import { useEffect, useState } from "react";
+import { courses as localCourses } from "@/app/data/courseData";
+import { notFound,useParams } from "next/navigation";
 
 
-import { courses } from "@/app/data/courseData";
-import { notFound } from "next/navigation";
+import { db } from "@/lib/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { useTenant } from "../../context/TenantContext";
+
 import CounsellingModal from "@/Components/CounsellingForm";
 import ApplyNowButton from "@/Components/ApplyNowButton";
 
 // Next.js ko batana padega kaun kaun se pages exist karte hain
-export async function generateStaticParams() {
-  return Object.keys(courses).map((slug) => ({
-    slug,
-  }));
-}
+// export async function generateStaticParams() {
+//   return Object.keys(courses).map((slug) => ({
+//     slug,
+//   }));
+// }
 
-export default async function CoursePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default function CoursePage() {  
 
-  // Next 15 fix (VERY IMPORTANT)
-  const { slug } = await params;
 
-  const course = courses[slug as keyof typeof courses];
+  const { slug } = useParams();
+  const { tenant, loading: tenantLoading } = useTenant();
+  const [course, setCourse] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
    
 
 
-  if (!course) return notFound();
+useEffect(() => {
+  const fetchFullData = async () => {
+    // 1. Check karo ki tenant load hua hai ya nahi
+    if (tenantLoading || !slug) return;
 
+    try {
+      setLoading(true);
+      let finalCourseData = null;
+
+      // 2. FIREBASE SE COURSE FETCH KARO
+      if (tenant?.clientId) {
+        console.log("🔍 Fetching Course for:", slug);
+        
+        const courseQ = query(
+          collection(db, "courses"),
+          where("adminId", "==", tenant.clientId),
+          where("slug", "==", slug) // Make sure Firestore mein 'slug' field hai
+        );
+
+        const courseSnap = await getDocs(courseQ);
+
+        if (!courseSnap.empty) {
+          const courseData = courseSnap.docs[0].data();
+          console.log("✅ Course Found:", courseData.title);
+
+          // 3. AB IS COURSE KI CATEGORY KE COLLEGES FETCH KARO
+          const collegeQ = query(
+            collection(db, "colleges"),
+            where("adminId", "==", tenant.clientId),
+            where("categorySlug", "==", courseData.category) // 'engineering' ya 'medical'
+          );
+
+          const collegeSnap = await getDocs(collegeQ);
+          const collegeList = collegeSnap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+
+          // Course aur Colleges ko merge kar do
+          finalCourseData = { ...courseData, colleges: collegeList };
+        }
+      }
+
+      // 4. FALLBACK TO JSON (Agar Firebase mein ye course nahi mila)
+      if (!finalCourseData) {
+        console.log("📚 Firebase empty, trying JSON fallback...");
+        const localData = localCourses[slug as keyof typeof localCourses];
+        if (localData) {
+          finalCourseData = localData;
+        }
+      }
+
+      setCourse(finalCourseData);
+    } catch (err) {
+      console.error("🔥 Error fetching data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchFullData();
+}, [slug, tenant, tenantLoading]);
+
+  if (loading || tenantLoading) return <div className="p-20 text-center">Loading Course Details...</div>;
+  if (!course) return notFound();
   return (
     <div className="bg-gray-50">
 
@@ -104,47 +172,47 @@ export default async function CoursePage({
           {/* ================= TOP COLLEGES ================= */}
          
 <section className="space-y-6">
-  <h2 className="text-3xl font-bold">Top Colleges</h2>
+  <h2 className="text-3xl font-bold">Top Colleges for {course.title}</h2>
 
-  {course.colleges?.map((college, index) => (
-    <div
-      key={index}
-      className="bg-white rounded-2xl shadow hover:shadow-xl transition p-6 border"
-    >
-      <h3 className="text-xl font-bold text-blue-900">
-        {college.name}
-      </h3>
-
-      <p className="text-gray-600">{college.location}</p>
-
-      <div className="grid md:grid-cols-2 gap-4 mt-4 text-sm">
+{course.colleges?.map((college: any, index: number) => (
+         <div key={index} className="bg-white rounded-2xl shadow-md p-6 border-l-4 border-orange-500">
+      <div className="flex justify-between items-start">
         <div>
-          <p className="font-semibold">Study Programs</p>
-          <p>{college.programs}</p>
+          <h3 className="text-xl font-bold text-blue-900">{college.name}</h3>
+          <p className="text-gray-500 flex items-center gap-1">
+             📍 {college.location}
+          </p>
         </div>
+        <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">
+          Placement: {college.placementpercentage}
+        </span>
+      </div>
 
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 bg-gray-50 p-4 rounded-xl text-sm">
         <div>
-          <p className="font-semibold">Entrance Exams</p>
-          <p>{college.exams}</p>
+          <p className="text-gray-400">Fees</p>
+          <p className="font-semibold text-gray-700">{college.fees}</p>
         </div>
-
         <div>
-          <p className="font-semibold">Fee Range</p>
-          <p>{college.fees}</p>
+          <p className="text-gray-400">Avg. Package</p>
+          <p className="font-semibold text-gray-700">{college.placement?.split(',')[0] || "N/A"}</p>
         </div>
-
         <div>
-          <p className="font-semibold">Ranking</p>
-          <p>{college.ranking}</p>
+          <p className="text-gray-400">Admission</p>
+          <p className="font-semibold text-gray-700 text-xs">{college.admission}</p>
+        </div>
+        <div>
+          <p className="text-gray-400">Hostel</p>
+          <p className="font-semibold text-gray-700">Available</p>
         </div>
       </div>
 
-      {/* <button 
-
-      className="mt-5 bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-orange-600">
-        Apply Now
-      </button> */}
-      <ApplyNowButton />
+      <div className="mt-4 flex gap-3">
+        <ApplyNowButton />
+        <button className="text-blue-900 font-semibold text-sm hover:underline">
+          View Details
+        </button>
+      </div>
     </div>
   ))}
 </section>

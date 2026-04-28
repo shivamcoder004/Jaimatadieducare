@@ -6,7 +6,12 @@ import { courses} from "@/app/data/courseData";
 import { collegeData } from "@/app/data/collegeData";
 import CounsellingModal from "./CounsellingForm";
 import { usePathname } from "next/navigation";
+import { useTenant } from "../app/context/TenantContext";
+import { db } from "@/lib/firebase"; // Apna firebase path check karein
+import { collection, query, where, getDocs } from "firebase/firestore";
 
+import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import { useState,useEffect } from "react";
 import { Menu, X, ChevronDown, User, Home,
@@ -25,11 +30,42 @@ import { Menu, X, ChevronDown, User, Home,
 
 export default function Navbar() {
 
+
+  const [user, setUser] = useState<any>(null); // User state
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { tenant, loading } = useTenant();
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [courseOpen, setCourseOpen] = useState(false);
   const [collegeOpen, setCollegeOpen] = useState(false);
   const [openCounselling, setOpenCounselling] = useState(false);
+const [dbCourses, setDbCourses] = useState<{slug: string, title: string}[]>([]);
 const pathname = usePathname();
+
+const [dbCategories, setDbCategories] = useState<{slug: string, title: string}[]>([]);
+const nameParts = tenant?.siteName ? tenant.siteName.split("  ") : ["Future", "Focus"];
+  const firstPart = nameParts[0]; 
+  const secondPart = nameParts.slice(1).join(" ");
+
+
+useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setUser(null);
+    setUserMenuOpen(false);
+  };
+
+
+
+
+
+
 
   // body scroll lock
 useEffect(() => {
@@ -62,6 +98,72 @@ useEffect(() => {
 
 }, [pathname]);
 
+
+useEffect(() => {
+  const fetchNavCourses = async () => {
+    // Jab tak tenant load na ho ya clientId na mile, wait karein
+    if (loading || !tenant?.clientId) return;
+
+    try {
+      const q = query(
+        collection(db, "courses"),
+        where("adminId", "==", tenant.clientId)
+      );
+      const snap = await getDocs(q);
+      const list = snap.docs.map(doc => ({
+        slug: doc.data().slug || doc.id, // Fallback to doc.id if slug missing
+        title: doc.data().title
+      }));
+      
+      console.log("📌 Navbar Courses Loaded:", list);
+      setDbCourses(list);
+    } catch (err) {
+      console.error("Error loading nav courses:", err);
+    }
+  };
+
+  fetchNavCourses();
+}, [tenant, loading]);
+
+
+
+useEffect(() => {
+  const fetchNavData = async () => {
+    if (loading || !tenant?.clientId) return;
+
+    try {
+      // Colleges ki Categories fetch karo
+      const catQ = query(
+        collection(db, "categories"), 
+        where("adminId", "==", tenant.clientId)
+      );
+      const catSnap = await getDocs(catQ);
+      const catList = catSnap.docs.map(doc => ({
+        slug: doc.data().slug || doc.id,
+        title: doc.data().title || doc.data().name
+      }));
+      
+      setDbCategories(catList);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
+  };
+
+  fetchNavData();
+}, [tenant, loading]);
+
+
+
+
+// Isse humein pata chalega ki aakhir data mein aa kya raha hai
+useEffect(() => {
+  if (tenant) {
+    console.log("Full Tenant Object:", tenant);
+    console.log("Permissions Map:", tenant.permissions);
+    console.log("Can Post Jobs Value:", tenant.permissions?.canPostJobs);
+  }
+}, [tenant]);
+
   return (
     
     <>
@@ -81,28 +183,27 @@ useEffect(() => {
 
   {/* Logo Image */}
   <div className="relative">
-    <Image
-      src="/future_focus.png"
-      alt="Future Focus Logo"
-      width={290}
-      height={90}
-      priority
-      className="h-9 sm:h-10 lg:h-15 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-    />
+  <Image
+                src={tenant?.branding?.logoUrl || "/future_focus.png"}
+                alt="Logo"
+                width={290}
+                height={90}
+                priority
+                className="h-9 sm:h-10 lg:h-15 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
   </div>
 
   {/* Brand Name */}
-  <div className="flex flex-col leading-tight">
+ <div className="flex flex-col leading-tight group">
+              {/* First Part (e.g., Future / Jai) */}
+<span className="text-xs sm:text-lg lg:text-[20px] tracking-[2px] text-orange-500 font-semibold uppercase">  
+                {loading ? "Loading..." : firstPart}
+              </span>
 
-    <span className="text-[10px] sm:text-xs tracking-[2px] text-orange-500 font-semibold uppercase">
-     Future
-    </span>
-
-    <span className="text-lg sm:text-xl lg:text-2xl font-extrabold text-blue-900 group-hover:text-orange-500 transition-colors duration-300">
-      Focus
-    </span>
-
-  </div>
+              {/* Second Part (e.g., Focus / Mata Di) */}
+<span className="text-lg sm:text-xl lg:text-2xl font-extrabold text-blue-900! transition-colors duration-300">                {loading ? "" : secondPart}
+              </span>
+            </div>
 
 </Link>
 
@@ -136,17 +237,24 @@ useEffect(() => {
 
 
 <ul className="space-y-3 border-t-2 border-orange-500 pt-3">
-  {(Object.keys(courses) as Array<keyof typeof courses>).map((slug) => (
-    <li key={slug}>
-      <Link 
-        href={`/course/${slug}`} 
-        className="block hover:text-orange-500 capitalize"
-      >
-        {/* Ab TypeScript ko pata hai ki courses[slug] safe hai */}
-        {courses[slug].title}
-      </Link>
-    </li>
-  ))}
+  {dbCourses.length > 0 ? (
+    dbCourses.map((course) => (
+      <li key={course.slug}>
+        <Link href={`/course/${course.slug}`} className="block hover:text-orange-500">
+          {course.title}
+        </Link>
+      </li>
+    ))
+  ) : (
+    // Agar DB khali hai toh purana JSON (Local) wala dikhao
+    Object.keys(courses).map((slug) => (
+      <li key={slug}>
+        <Link href={`/course/${slug}`} className="block hover:text-orange-500 capitalize">
+          {courses[slug as keyof typeof courses].title}
+        </Link>
+      </li>
+    ))
+  )}
 </ul>
             </div>
           </div>
@@ -172,51 +280,122 @@ useEffect(() => {
 
 
 <ul className="space-y-3 border-t-2 border-orange-500 pt-3">
-
-{Object.entries(collegeData).map(([slug, category]) => (
-  <li key={slug}>
-    <Link
-      href={`/colleges/${slug}`}
-      className="block hover:text-orange-500"
-    >
-      {category.title.replace("Colleges in India", "")}
-    </Link>
-  </li>
-))}
-
+  {dbCategories.length > 0 ? (
+    // Firebase wala data
+    dbCategories.map((cat) => (
+      <li key={cat.slug}>
+        <Link
+          href={`/colleges/${cat.slug}`}
+          className="block hover:text-orange-500 capitalize"
+        >
+          {cat.title.replace("Colleges in India", "")}
+        </Link>
+      </li>
+    ))
+  ) : (
+    // Fallback: Agar Firebase khali ho toh purana JSON dikhao
+    Object.entries(collegeData).map(([slug, category]) => (
+      <li key={slug}>
+        <Link
+          href={`/colleges/${slug}`}
+          className="block hover:text-orange-500"
+        >
+          {category.title.replace("Colleges in India", "")}
+        </Link>
+      </li>
+    ))
+  )}
 </ul>
             </div>
           </div>
 
           <Link href="/about" className="hover:text-orange-500 transition">About</Link>
-          <Link href="/Job" className="hover:text-orange-500 transition">JOb</Link>
+{/* Navbar ke andar Link section mein aisa likhein */}
 
+{/* Navbar ke andar Link section mein isse replace karein */}
+
+{/* Desktop Menu - Job Link */}
+{/* Navbar Logic */}
+{!loading && tenant?.permissions?.canPostJobs === true && (
+  <Link href="/Job" className="hover:text-orange-500 transition  ">
+    Job
+  </Link>
+)}
           <Link href="/contact" className="hover:text-orange-500 transition">Contact</Link>
         </nav>
 
         {/* RIGHT SIDE (DESKTOP) */}
         <div className="hidden lg:flex items-center gap-4">
 
-          {/* LOGIN */}
-          <Link href="/login" className="flex items-center gap-1 text-gray-700 hover:text-orange-500">
-            <User size={18}/> Login
-          </Link>
+
+{user ? (
+    /* Humne 'group' class add ki hai jo hover handle karegi */
+    <div className="relative group py-2"> 
+      <div className="flex items-center gap-2 cursor-pointer">
+        {/* User Photo */}
+        <div className="w-10 h-10 rounded-full border-2 border-orange-500 overflow-hidden group-hover:scale-110 transition-transform duration-300 shadow-sm">
+          {user.photoURL ? (
+            <img 
+              src={user.photoURL} 
+              alt="Profile" 
+              className="w-full h-full object-cover" 
+              referrerPolicy="no-referrer" 
+            />
+          ) : (
+            <div className="bg-blue-900 text-white w-full h-full flex items-center justify-center font-bold">
+              {user.displayName?.charAt(0) || "U"}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Profile Dropdown - 'hidden group-hover:block' se ye hover par dikhega */}
+      <div className="absolute right-0 mt-0 w-52 pt-4 hidden group-hover:block z-[100] animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-2 overflow-hidden">
+          <div className="px-4 py-3 border-b border-gray-50 mb-1">
+            <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Account</p>
+            <p className="text-sm font-bold truncate text-blue-900">{user.displayName}</p>
+            <p className="text-[10px] text-gray-500 truncate">{user.email}</p>
+          </div>
+          
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-xl transition-colors font-semibold"
+          >
+            <span className="text-lg">Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <Link href="/login" className="flex items-center gap-1 text-gray-700 hover:text-orange-500 font-bold transition-colors">
+       Login
+    </Link>
+  )}
+
+
+
+
+
+
+        
 
           {/* REGISTER */}
-          <Link
+          {/* <Link
             href="/register"
             className="border border-orange-500 text-orange-500 px-4 py-2 rounded-xl hover:bg-orange-500 hover:text-white transition"
           >
             Register
-          </Link>
+          </Link> */}
 
           {/* CTA */}
-          <button
-  onClick={() => setOpenCounselling(true)}
-  className="bg-orange-500 text-white px-5 py-2 rounded-xl hover:bg-orange-600 transition hover:scale-105 shadow-md"
->
-  Free Counselling
-</button>
+       <button
+              onClick={() => setOpenCounselling(true)}
+              style={{ backgroundColor: 'var(--primary-color)' }} // 4. Dynamic Color
+              className="text-white px-5 py-2 rounded-xl hover:opacity-90 transition hover:scale-105 shadow-md"
+            >
+              Free Counselling
+            </button>
 
         </div>
 
@@ -303,18 +482,24 @@ useEffect(() => {
 
       </div> */}
       <ul className="space-y-3 border-t-2 border-orange-500 pt-3">
-  {(Object.keys(courses) as Array<keyof typeof courses>).map((slug) => (
-    <li key={slug}>
-      <Link 
-        href={`/course/${slug}`}
-        onClick={() => setMobileOpen(false)} 
-        className="block hover:text-orange-500 capitalize"
-      >
-        {/* Ab TypeScript ko pata hai ki courses[slug] safe hai */}
-        {courses[slug].title}
-      </Link>
-    </li>
-  ))}
+  {dbCourses.length > 0 ? (
+    dbCourses.map((course) => (
+      <li key={course.slug}>
+        <Link href={`/course/${course.slug}`} className="block hover:text-orange-500">
+          {course.title}
+        </Link>
+      </li>
+    ))
+  ) : (
+    // Agar DB khali hai toh purana JSON (Local) wala dikhao
+    Object.keys(courses).map((slug) => (
+      <li key={slug}>
+        <Link href={`/course/${slug}`} className="block hover:text-orange-500 capitalize">
+          {courses[slug as keyof typeof courses].title}
+        </Link>
+      </li>
+    ))
+  )}
 </ul>
     </details>
 
@@ -328,21 +513,32 @@ useEffect(() => {
         <ChevronDown className="group-open:rotate-180 transition"/>
       </summary>
 
-      <ul className="space-y-3 border-t-2 border-orange-500 pt-3">
-
-{Object.entries(collegeData).map(([slug, category]) => (
-  <li key={slug}>
-    <Link
-      href={`/colleges/${slug}`}
-      onClick={() => setMobileOpen(false)} 
-
-      className="block hover:text-orange-500"
-    >
-      {category.title.replace("Colleges in India", "")}
-    </Link>
-  </li>
-))}
-
+<ul className="space-y-3 border-t-2 border-orange-500 pt-3">
+  {dbCategories.length > 0 ? (
+    // Firebase wala data
+    dbCategories.map((cat) => (
+      <li key={cat.slug}>
+        <Link
+          href={`/colleges/${cat.slug}`}
+          className="block hover:text-orange-500 capitalize"
+        >
+          {cat.title.replace("Colleges in India", "")}
+        </Link>
+      </li>
+    ))
+  ) : (
+    // Fallback: Agar Firebase khali ho toh purana JSON dikhao
+    Object.entries(collegeData).map(([slug, category]) => (
+      <li key={slug}>
+        <Link
+          href={`/colleges/${slug}`}
+          className="block hover:text-orange-500"
+        >
+          {category.title.replace("Colleges in India", "")}
+        </Link>
+      </li>
+    ))
+  )}
 </ul>
     </details>
 
@@ -352,11 +548,17 @@ useEffect(() => {
       <Info size={20} className="text-blue-600"/>
       About
     </Link>
- <Link onClick={()=>setMobileOpen(false)} href="/Job"
-      className="flex items-center gap-3 text-lg hover:text-orange-500 transition">
-      <Briefcase size={20} className="text-blue-600"/>
-      Job
-    </Link>
+{/* Mobile Drawer - Job Link with Permission Check */}
+{!loading && tenant?.permissions?.canPostJobs === true && (
+  <Link 
+    onClick={() => setMobileOpen(false)} 
+    href="/Job"
+    className="flex items-center gap-3 text-lg hover:text-orange-500 transition"
+  >
+    <Briefcase size={20} className="text-blue-600"/>
+    Job
+  </Link>
+)}
 
     {/* Contact */}
     <Link onClick={()=>setMobileOpen(false)} href="/contact"
@@ -367,25 +569,40 @@ useEffect(() => {
 
     <hr/>
 
-    {/* Login */}
-    <Link
-      onClick={()=>setMobileOpen(false)}
-      href="/login"
-      className="flex items-center justify-center gap-2 border p-3 rounded-xl text-center hover:bg-gray-50"
-    >
-      <LogIn size={18}/>
-      Login
+    {/* Mobile Login/User Section */}
+{user ? (
+  <div className="flex flex-col gap-4 p-3 bg-blue-50 rounded-2xl">
+    <div className="flex items-center gap-3">
+      <Image src={user.photoURL || "/default-avatar.png"} alt="User" width={40} height={40} className="rounded-full" />
+      <div>
+        <p className="text-sm font-bold text-blue-900">{user.displayName}</p>
+        <p className="text-[10px] text-gray-500">{user.email}</p>
+      </div>
+    </div>
+    <button onClick={handleLogout} className="text-sm text-red-600 font-bold text-center border border-red-200 py-2 rounded-xl">
+      Logout
+    </button>
+  </div>
+) : (
+  <div className="flex flex-col gap-3">
+    <Link onClick={()=>setMobileOpen(false)} href="/login" className="flex items-center justify-center gap-2 border p-3 rounded-xl">
+      <LogIn size={18}/> Login
     </Link>
+    {/* <Link onClick={()=>setMobileOpen(false)} href="/register" className="flex items-center justify-center gap-2 bg-orange-500 text-white p-3 rounded-xl">
+      <UserPlus size={18}/> Register
+    </Link> */}
+  </div>
+)}
 
     {/* Register */}
-    <Link
+    {/* <Link
       onClick={()=>setMobileOpen(false)}
       href="/register"
       className="flex items-center justify-center gap-2 bg-orange-500 text-white p-3 rounded-xl text-center hover:bg-orange-600 transition"
     >
       <UserPlus size={18}/>
       Register
-    </Link>
+    </Link> */}
     <button
   onClick={() => setOpenCounselling(true)}
   className="flex items-center justify-center gap-2 bg-orange-500 text-white p-3 rounded-xl text-center hover:bg-orange-600 transition"
@@ -397,7 +614,7 @@ useEffect(() => {
     <div className="bg-blue-50 rounded-xl p-3text-center mt-2">
       <p className="text-sm text-gray-600">Contact With Us</p>
       <p className="font-semibold text-blue-900 flex items-center justify-center gap-2 mt-1">
-        <Phone size={16}/> 656622355
+        <Phone size={16}/> 8409463997
       </p>
     </div>
 

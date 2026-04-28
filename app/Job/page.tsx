@@ -1,53 +1,59 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-
-// Baad mein ye data Firebase se aayega
-const JOBS_DATA = [
-  {
-    id: 1,
-    role: "Software Engineer",
-    company: "Tech Mahindra",
-    location: "Bangalore / Remote",
-    salary: "₹6 - ₹12 LPA",
-    type: "Full-Time",
-    category: "Engineering",
-    elegibility:"fresher",
-    skillrequired:"good communication ",
-    jobtiming:"9.30 to 6.30",
-    jobdescription:"tech",
-    qualification:"btech",
-    
-  },
-  {
-    id: 2,
-    role: "Staff Nurse",
-    company: "Apollo Hospital",
-    location: "Hyderabad",
-    salary: "₹4 - ₹7 LPA",
-    type: "Full-Time",
-    category: "Nursing"
-  },
-  {
-    id: 3,
-    role: "Marketing Manager",
-    company: "Edu-Tech Corp",
-    location: "Delhi NCR",
-    salary: "₹8 - ₹15 LPA",
-    type: "Contract",
-    category: "Management"
-  },
-];
+import { db } from "@/lib/firebase";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { useTenant } from "@/app/context/TenantContext"; // Tenant context se adminId lenge
 
 export default function JobsPage() {
+  const { tenant, loading: tenantLoading } = useTenant();
+  const [dbJobs, setDbJobs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
 
-  const categories = ["All", "Engineering", "Nursing", "Management", "MBA"];
+  const categories = ["All", "Engineering", "Nursing", "Management", "MBA", "BCA"];
 
+  useEffect(() => {
+    const fetchJobs = async () => {
+      // 1. Check if tenant is loaded
+      if (tenantLoading || !tenant?.clientId) return;
+
+      try {
+        setLoading(true);
+        // 2. Query Firebase: Get jobs for this specific admin
+        const jobsRef = collection(db, "jobs");
+        const q = query(
+          jobsRef, 
+          where("adminId", "==", tenant.clientId),
+          orderBy("createdAt", "desc") // Latest jobs pehle dikheingi
+        );
+
+        const querySnapshot = await getDocs(q);
+        const jobsList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        setDbJobs(jobsList);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, [tenant, tenantLoading]);
+
+  // 3. Client-side Filtering
   const filteredJobs = filter === "All" 
-    ? JOBS_DATA 
-    : JOBS_DATA.filter(job => job.category === filter);
+    ? dbJobs 
+    : dbJobs.filter(job => job.category === filter);
+
+  if (loading || tenantLoading) {
+    return <div className="min-h-screen bg-[#0a1425] flex items-center justify-center text-white">Loading Careers...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-[#0a1425] text-white pt-24 pb-12 px-6">
@@ -57,7 +63,7 @@ export default function JobsPage() {
           Direct <span className="text-orange-500">Placement</span> Portal
         </h1>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-          We don't just provide admissions; we secure your future. Explore exclusive job opportunities for our alumni and students.
+          We secure your future. Explore exclusive job opportunities for our students.
         </p>
       </div>
 
@@ -87,37 +93,43 @@ export default function JobsPage() {
           >
             <div>
               <div className="flex justify-between items-start mb-4">
-                <span className="bg-[#F4B400]/10 text-[#F4B400] text-xs px-3 py-1 rounded-lg font-bold uppercase tracking-wider">
-                  {job.type}
+                <span className="bg-[#F4B400]/10 text-[#F4B400] text-[10px] px-3 py-1 rounded-lg font-bold uppercase tracking-wider">
+                  {job.type || "Full-Time"}
                 </span>
-                <span className="text-gray-500 text-sm">{job.category}</span>
+                <span className="text-gray-500 text-xs font-bold uppercase">{job.category}</span>
               </div>
+              
               <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[#F4B400] transition-colors">
                 {job.role}
               </h3>
               <p className="text-gray-400 font-medium mb-4">{job.company}</p>
               
-              <div className="space-y-2 mb-6">
+              <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <span>📍</span> {job.location}
+                  <span className="text-orange-500">📍</span> {job.location}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <span>💰</span> {job.salary}
+                  <span className="text-orange-500">💰</span> {job.salary}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <span className="text-orange-500">🎓</span> {job.qualification}
                 </div>
               </div>
             </div>
 
-          <Link href="/Job/apply" className="w-full block">
-  <button className="w-full bg-white/10 group-hover:bg-[#F4B400] text-white group-hover:text-black py-3 rounded-xl font-bold transition-all">
-    Apply Now
-  </button>
-</Link>
+            {/* Apply Button - Pass Job ID in URL if needed */}
+            <Link href={`/Job/apply?jobId=${job.id}`} className="w-full block">
+              <button className="w-full bg-white/10 group-hover:bg-[#F4B400] text-white group-hover:text-black py-3 rounded-xl font-bold transition-all">
+                Apply Now
+              </button>
+            </Link>
           </div>
         ))}
       </div>
 
-      {filteredJobs.length === 0 && (
-        <div className="text-center py-20 text-gray-500">
+      {/* Empty State */}
+      {!loading && filteredJobs.length === 0 && (
+        <div className="text-center py-20 text-gray-500 bg-white/5 rounded-3xl border border-dashed border-white/10 max-w-6xl mx-auto">
           No jobs found in this category. Stay tuned!
         </div>
       )}

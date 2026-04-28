@@ -1,32 +1,79 @@
 "use client"; 
-import React, { useState, use } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { MapPin, GraduationCap, Trophy, Search,LocateIcon,Info,Building2 ,Phone, MessageCircle, ArrowRight} from 'lucide-react'; 
 import Link from 'next/link'; // ✅ Link import kiya
 import { collegeData } from "@/app/data/collegeData"; 
+import { db } from "@/lib/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { useTenant } from "../../context/TenantContext";
 
-export default function CategoryPage({ 
-  params 
-}: { 
-  params: Promise<{ category: string }>;
-}) {
-  
+export default function CategoryPage({ params }: { params: Promise<{ category: string }> }) {  params 
+
+  const { tenant, loading: tenantLoading } = useTenant();
   const unwrappedParams = use(params);
   const categorySlug = unwrappedParams.category;
 
-  const [selectedCity, setSelectedCity] = useState("All");
   
   const category = (collegeData as any)[categorySlug];
+  const [colleges, setColleges] = useState<any[]>([]);
+  const [categoryInfo, setCategoryInfo] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedCity, setSelectedCity] = useState("All");
   
   if (!category) return <div className="p-20 text-center font-bold">Category Not Found</div>;
 
   // ✅ Hum Object.entries use karenge taaki humein 'slug' mil sake navigation ke liye
   const collegesEntry = Object.entries(category.colleges || {});
   
-  const cities = ["All", ...new Set(collegesEntry.map(([_, c]: any) => c.location?.split(',')[0].trim()))];
+const cities = ["All", ...new Set(colleges.map(c => {
+  // Agar location "Patna, Bihar" hai toh sirf "Patna" lega
+  return c.location ? c.location.split(',')[0].trim() : "Unknown";
+}))];
 
   const filteredColleges = selectedCity === "All" 
-    ? collegesEntry 
-    : collegesEntry.filter(([_, c]: any) => c.location?.includes(selectedCity));
+  ? colleges 
+  : colleges.filter(c => c.location?.toLowerCase().includes(selectedCity.toLowerCase()));
+
+// if (loading) return <div className="p-20 text-center">Loading Colleges...</div>;
+
+useEffect(() => {
+    const fetchData = async () => {
+      if (tenantLoading || !tenant?.clientId) return;
+
+      try {
+        setLoading(true);
+        
+        // 1. Fetch Category Details (For Title & Intro)
+        const catQ = query(
+          collection(db, "categories"), 
+          where("adminId", "==", tenant.clientId),
+          where("slug", "==", categorySlug)
+        );
+        const catSnap = await getDocs(catQ);
+        if (!catSnap.empty) {
+          setCategoryInfo(catSnap.docs[0].data());
+        }
+
+        // 2. Fetch Colleges for this Category
+        const colQ = query(
+          collection(db, "colleges"),
+          where("adminId", "==", tenant.clientId),
+          where("categorySlug", "==", categorySlug)
+        );
+        const colSnap = await getDocs(colQ);
+        const colList = colSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setColleges(colList);
+
+      } catch (err) {
+        console.error("Error fetching colleges:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [categorySlug, tenant, tenantLoading]);
+
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
@@ -49,12 +96,11 @@ export default function CategoryPage({
 
   {/* Heading */}
   <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-    {category.title}
-  </h1>
+{categoryInfo?.title || `${categorySlug} Colleges`}  </h1>
 
   {/* Description */}
   <p className="text-lg md:text-xl opacity-90 max-w-3xl mx-auto mb-10">
-    {category.intro}
+{categoryInfo?.description || `Explore top-rated ${categorySlug} institutions and find the best fit for your career.`}
   </p>
 
   {/* CTA Buttons */}
@@ -96,21 +142,20 @@ export default function CategoryPage({
           <div className="flex items-center gap-3">
             <Search className="text-blue-600" size={20} />
             <select 
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="font-bold text-gray-800 border-none focus:ring-0 cursor-pointer"
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              className="font-bold text-gray-800 border-none focus:ring-0 outline-none"
             >
-                {cities.map(city => <option key={city} value={city}>{city}</option>)}
+              {cities.map(city => <option key={city} value={city}>{city}</option>)}
             </select>
           </div>
-          <p className="text-sm font-medium text-gray-500">Total: {filteredColleges.length} Colleges</p>
+          <p className="text-sm font-medium text-gray-500">Found {filteredColleges.length} Colleges</p>
         </div>
 
         {/* --- COLLEGE CARDS GRID --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pb-24">
-          {filteredColleges.map(([slug, college]: any) => (
-            // ✅ Card ko Link ke andar wrap kiya aur href banaya
-            <Link key={slug} href={`/colleges/${categorySlug}/${slug}`} className="group">
+          {filteredColleges.map((college) => (
+            <Link key={college.id} href={`/colleges/${categorySlug}/${college.id}`} className="group">
               <CollegeCard college={college} />
             </Link>
           ))}

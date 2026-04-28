@@ -3,6 +3,7 @@
 import "./globals.css";
 import Navbar from "@/Components/Navbar";
  import Footer from "@/Components/Fotter";
+ import { TenantProvider } from "./context/TenantContext";
 
 export const metadata = {
   title: "Admission Counsellor",
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white text-gray-900">
+        <TenantProvider>
         <Navbar />
         {children}
         {/* --- Floating WhatsApp Button --- */}
@@ -46,6 +48,7 @@ export default function RootLayout({
           </svg>
         </a>
         <Footer />
+        </TenantProvider>
       </body>
     </html>
   );

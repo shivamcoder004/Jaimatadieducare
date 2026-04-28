@@ -106,7 +106,7 @@ export default function ContactPage() {
                 <div className="sm:col-span-1 bg-white p-6 rounded-3xl border border-slate-100 shadow-lg flex flex-col items-center justify-center text-center">
                   <Mail className="text-orange-500 mb-3" size={28} />
                   <p className="text-xs font-bold text-slate-400 uppercase mb-1">Email Us</p>
-                  <p className="text-sm font-bold text-slate-800 break-all">sewaskyfoundation@gmail.com</p>
+                  <p className="text-sm font-bold text-slate-800 break-all">futurefocus199703@gmail.com</p>
                 </div>
                 
                 <div className="sm:col-span-2 relative h-48 rounded-3xl overflow-hidden border-4 border-white shadow-2xl">

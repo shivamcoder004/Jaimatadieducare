@@ -2,14 +2,18 @@
 
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useTenant } from "@/app/context/TenantContext"; // Context import karein
+
 interface CounsellingModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-
-
 export default function CounsellingModal({ open, setOpen }: CounsellingModalProps) {
+  // Context se tenant ka sahi data lein
+  const { tenant } = useTenant(); 
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -17,16 +21,15 @@ export default function CounsellingModal({ open, setOpen }: CounsellingModalProp
   const [mainCourse, setMainCourse] = useState("");
   const [course, setCourse] = useState("");
 
-  // COURSE DATA (MAIN LOGIC)
   const courseData = {
     Engineering: ["B.Tech", "Diploma", "BCA", "MCA"],
     Medical: ["MBBS", "BDS", "BAMS", "BHMS", "Nursing"],
     Management: ["BBA", "MBA", "PGDM"],
     Pharmacy: ["B.Pharma", "D.Pharma"],
-    Education: ["B.Ed", "D.El.Ed"]
+    Education: ["B.Ed", "D.El.Ed"],
+    other: [""]
   };
 
-  // ESC close
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -37,67 +40,59 @@ export default function CounsellingModal({ open, setOpen }: CounsellingModalProp
 
   if (!open) return null;
 
-  // submit
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//     console.log({
-//       name,
-//       phone,
-//       location,
-//       mainCourse,
-//       course
-//     });
-
-//     alert("Thank you! Our counsellor will call you soon.");
-
-//     // reset
-//     setName("");
-//     setPhone("");
-//     setLocation("");
-//     setMainCourse("");
-//     setCourse("");
-//     setOpen(false);
-//   };
-
-
-const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    const whatsappNumber = "8271563199"; // <-- apna number yaha daalo
-  
-    // message auto generate
-    const message = `
-  🎓 *New Admission Enquiry*
-  
-  👤 Name: ${name}
-  📞 Phone: ${phone}
-  📍 Preferred Location: ${location}
-  
-  📚 Stream: ${mainCourse}
-  🏫 Course: ${course}
-    `;
-  
-    // encode (VERY IMPORTANT)
-    const encodedMessage = encodeURIComponent(message);
-  
-    // whatsapp url
-    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-  
-    // open whatsapp
-    window.open(whatsappURL, "_blank");
-  
-    // reset form
-    setName("");
-    setPhone("");
-    setLocation("");
-    setMainCourse("");
-    setCourse("");
-    setOpen(false);
+
+    // 🔴 LOCALSTORAGE KI JAGAH CONTEXT SE ID LEIN
+    const currentClientId = tenant?.clientId; 
+
+    if (!currentClientId) {
+      alert("Error: Website identity not found. Please refresh.");
+      return;
+    }
+
+    try {
+      const formData = {
+        adminId: currentClientId, // Ab hamesha FutureFocus wali ID jayegi
+        name,
+        phone,
+        location,
+        mainCourse,
+        course,
+        status: "new",
+        createdAt: serverTimestamp(),
+        siteDomain: tenant.domain || "unknown" // Extra info ke liye
+      };
+
+      // Firebase Save
+      const docRef = await addDoc(collection(db, "counselling_queries"), formData);
+      console.log("✅ Query saved for Admin ID:", currentClientId);
+
+      // WhatsApp Logic
+      const whatsappNumber = "8409463997"; 
+      const message = `
+🎓 *New Admission Enquiry*
+👤 Name: ${name}
+📞 Phone: ${phone}
+📍 Location: ${location}
+📚 Stream: ${mainCourse}
+🏫 Course: ${course}
+🌐 Site: ${tenant.domain}
+      `;
+      
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+      // Reset & Close
+      setName(""); setPhone(""); setLocation(""); setMainCourse(""); setCourse("");
+      setOpen(false);
+
+      window.open(whatsappURL, "_blank");
+
+    } catch (error) {
+      console.error("🔥 Firebase Error:", error);
+    }
   };
-  
-
-
 
 
 
