@@ -39,6 +39,7 @@ const COLLEGES = [
   { id: 8, name: "VGU JAIPUR", logo: "/college/vgu.jpeg" },
 ];
 
+
 const STATS = [
     { id: 1, label: "STUDENT ENROLLED", value: 2600, suffix: "+" },
     { id: 2, label: "CLASS COMPLETED", value: 5900, suffix: "+" },
