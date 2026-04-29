@@ -6,9 +6,28 @@ import Navbar from "@/Components/Navbar";
  import { TenantProvider } from "./context/TenantContext";
 
 export const metadata = {
-  title: "Admission Counsellor",
-  description: "India’s Trusted Admission Counsellors",
- 
+  title: "FutureFocuss – Career & Admission Counselling in Patna, Bihar | BTech, MBBS, MBA",
+  description:
+    "FutureFocuss provides free admission counselling in Patna and Bihar for BTech, MBBS, MBA, B.Ed, and other professional courses. Get college selection, fee guidance, and 100% placement support.",
+  keywords:
+    "admission counselling Patna, career counselling Bihar, FutureFocuss career guidance, BTech counselling Patna, MBBS counselling Bihar",
+  // Optional: Open Graph (social sharing ke liye)
+  openGraph: {
+    title: "FutureFocuss – Career & Admission Counselling in Patna, Bihar",
+    description:
+      "Free admission counselling for BTech, MBBS, MBA, B.Ed and more in Patna, Bihar. Top college selection and placement support.",
+    url: "https://www.futurefocuss.in",
+    siteName: "FutureFocuss",
+    images: [
+      {
+        url: "https://www.futurefocuss.in/future_focus.png",
+        width: 800,
+        height: 600,
+        alt: "FutureFocuss Admission Counselling",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({
