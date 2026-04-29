@@ -29,14 +29,14 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
 
 // Update these to match your actual college names from the image
 const COLLEGES = [
-  { id: 1, name: "BABA FARID", logo: "/future_focus.jpeg" },
+  { id: 1, name: "BABA FARID", logo: "/college/babafarid.webp" },
   { id: 2, name: "GURU KASHI UNIVERSITY", logo: "/Gurukashi.png" },
   { id: 3, name: "RIT ROORKEE", logo: "/rit.png" },
-  { id: 4, name: "SHRI RAM", logo: "" },
-  { id: 5, name: "TULA'S INSTITUTE", logo: "" },
-  { id: 6, name: "JAIPUR NATIONAL UNIVERSITY", logo: "" },
-  { id: 7, name: "JAGANNATH UNIVERSITY", logo: "" },
-  { id: 8, name: "VGU JAIPUR", logo: "" },
+  { id: 4, name: "SHRI RAM", logo: "/college/shreeramcollege.jpeg" },
+  // { id: 5, name: "TULA'S INSTITUTE", logo: "" },
+  { id: 6, name: "JAIPUR NATIONAL UNIVERSITY", logo: "/college/jaipurnational.png" },
+  { id: 7, name: "JAGANNATH UNIVERSITY", logo: "/college/jagannath.jpg" },
+  { id: 8, name: "VGU JAIPUR", logo: "/college/vgu.jpeg" },
 ];
 
 const STATS = [

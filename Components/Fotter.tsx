@@ -121,7 +121,7 @@ export default function Footer() {
                 <Mail size={20} className="text-orange-500 shrink-0" />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Email Us</p>
-                  <a href="mailto:jai@gmail.com" className="hover:text-orange-400 transition-colors">sewaskyfoundation@gmail.com</a>
+                  <a href="mailto:jai@gmail.com" className="hover:text-orange-400 transition-colors">futurefocus199703@gmail.com</a>
                 </div>
               </div>
 
@@ -129,8 +129,27 @@ export default function Footer() {
                 <Phone size={20} className="text-orange-500 shrink-0" />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Call Experts</p>
-                  <a href="tel:+917304455555" className="hover:text-orange-400 transition-colors">8409463997</a>
-                </div>
+<a 
+  href="tel:+918409463997" 
+  className="font-semibold hover:text-orange-400 transition-colors duration-300"
+>
+  +91 84094 63997
+</a>
+
+
+
+
+<p className='mt-5'>
+  
+<a 
+  href="tel:+918252895483" 
+  className="font-semibold hover:text-orange-400 transition-colors duration-300"
+>
+  +91 8252895483
+</a>
+        
+</p>
+        </div>
               </div>
             </div>
           </div>

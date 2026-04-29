@@ -69,37 +69,57 @@ export default function ContactPage() {
 
               {/* Call & WhatsApp Box */}
               <div className="bg-slate-900 rounded-[2.5rem] p-8 md:p-10 text-white relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-orange-600/20 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-orange-600/30 transition-all" />
-                
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
-                    <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
-                    Quick Connect
-                  </h3>
-                  
-                  <div className="flex flex-col md:flex-row gap-6">
-                    <a href="tel:+918409463997" className="flex-1 flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
-                      <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-600/40">
-                        <Phone size={20} />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Call Expert</p>
-                        <p className="text-lg font-black">+91 84094 63997</p>
-                      </div>
-                    </a>
+  {/* Decorative Background Glow */}
+  <div className="absolute top-0 right-0 w-64 h-64 bg-orange-600/20 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-orange-600/30 transition-all" />
+  
+  <div className="relative z-10">
+    <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
+      <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
+      Quick Connect
+    </h3>
+    
+    {/* Main Container: Stacked Vertically */}
+    <div className="flex flex-col gap-4">
+      
+      {/* Top Row: Phone and WhatsApp side-by-side */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* WhatsApp Button */}
+        <a href="https://wa.me/918409463997" target="_blank" rel="noreferrer" className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
+          <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-600/40">
+            <MessageSquare size={20} />
+          </div>
+          <div>
+            <p className="text-xs font-bold opacity-60 uppercase tracking-widest">WhatsApp</p>
+            <p className="text-lg font-black">Chat with Us</p>
+          </div>
+        </a>
 
-                    <a href="https://wa.me/918409463997" target="_blank" className="flex-1 flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
-                      <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-600/40">
-                        <MessageSquare size={20} />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold opacity-60 uppercase tracking-widest">WhatsApp</p>
-                        <p className="text-lg font-black">Chat with Us</p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
+        {/* First Phone Button */}
+        <a href="tel:+918409463997" className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
+          <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-600/40">
+            <Phone size={20} />
+          </div>
+          <div>
+            <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Call Expert</p>
+            <p className="text-lg font-black">+91 84094 63997</p>
+          </div>
+        </a>
+      </div>
+
+      {/* Bottom Row: Second Phone Button (Full Width) */}
+      <a href="tel:+918409463997" className="flex items-center    gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
+        <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-600/40">
+          <Phone size={20} />
+        </div>
+        <div>
+          <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Support Line</p>
+          <p className="text-lg font-black">+91 84094 63997</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</div>
 
               {/* Email & Map */}
               <div className="grid sm:grid-cols-3 gap-6">
