@@ -20,7 +20,7 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
         const cleanDomain = hostname.replace(/^www\./, "");
         
         // 3. Localhost fallback
-        const currentDomain = cleanDomain === "localhost" ? "futurefocuseducation.vercel.app" : cleanDomain;
+        const currentDomain = cleanDomain === "localhost" ? "futurefocuss.in" : cleanDomain;
 
         console.log("🔍 Browser Hostname:", hostname);
         console.log("🌐 Cleaned Domain for DB Query:", currentDomain);
