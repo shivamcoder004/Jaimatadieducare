@@ -46,7 +46,7 @@ export default function RootLayout({
 
 
         <a
-          href="https://wa.me/918409463997" 
+          href="https://wa.me/918252895483" 
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 z-50 bg-[#25D366] p-3 rounded-full shadow-2xl hover:bg-[#128C7E] transition-all duration-300 hover:scale-110 flex items-center justify-center"
