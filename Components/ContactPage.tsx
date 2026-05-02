@@ -101,7 +101,7 @@ export default function ContactPage() {
           </div>
           <div>
             <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Call Expert</p>
-            <p className="text-lg font-black">+91 84094 63997</p>
+            <p className="text-lg font-black">+91 8252895483</p>
           </div>
         </a>
       </div>
