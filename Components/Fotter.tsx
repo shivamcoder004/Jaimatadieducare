@@ -194,7 +194,7 @@ export default function Footer() {
 
 
           {/* DASYNOMA BRANDING SECTION */}
-          <motion.a 
+          {/* <motion.a 
             href="https://www.dasynoma.in" 
             target="_blank"
             rel="noopener noreferrer"
@@ -211,7 +211,7 @@ export default function Footer() {
                </span>
                <ExternalLink size={14} className="text-blue-100/40 group-hover:text-white" />
             </div>
-          </motion.a>
+          </motion.a> */}
         </div>
       </div>
     </footer>
