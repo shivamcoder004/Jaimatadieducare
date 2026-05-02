@@ -31,6 +31,8 @@ interface CourseCategory {
 const coursesAfter12th: CourseCategory[] = [
   { title: "Engineering", slug: "engineering", courses: ["B.Tech", "BE"], icon: "⚙️", color: "bg-blue-50/90 text-blue-700 border-blue-200" },
   
+  { title: "Nursing", slug: "nursing", courses: ["GNM", "B.SC", "PB.B.SC", "M.SC"], icon: "💉", color: "bg-red-50/90 text-red-700 border-red-200" },
+
   { title: "Medical", slug: "medical", courses: ["MBBS", "BDS", "BAMS", "BHMS"], icon: "🩺", color: "bg-red-50/90 text-red-700 border-red-200" },
   
   { title: "Management", slug: "management", courses: ["BBA", "BMS"], icon: "💼", color: "bg-amber-50/90 text-amber-700 border-amber-200" },

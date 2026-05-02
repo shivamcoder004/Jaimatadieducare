@@ -14,16 +14,16 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
   const categorySlug = unwrappedParams.category;
 
   
-  const category = (collegeData as any)[categorySlug];
+  // const category = (collegeData as any)[categorySlug];
   const [colleges, setColleges] = useState<any[]>([]);
   const [categoryInfo, setCategoryInfo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCity, setSelectedCity] = useState("All");
   
-  if (!category) return <div className="p-20 text-center font-bold">Category Not Found</div>;
+  // if (!category) return <div className="p-20 text-center font-bold">Category Not Found</div>;
 
   // ✅ Hum Object.entries use karenge taaki humein 'slug' mil sake navigation ke liye
-  const collegesEntry = Object.entries(category.colleges || {});
+  // const collegesEntry = Object.entries(category.colleges || {});
   
 const cities = ["All", ...new Set(colleges.map(c => {
   // Agar location "Patna, Bihar" hai toh sirf "Patna" lega
@@ -44,11 +44,11 @@ useEffect(() => {
         setLoading(true);
         
         // 1. Fetch Category Details (For Title & Intro)
-        const catQ = query(
-          collection(db, "categories"), 
-          where("adminId", "==", tenant.clientId),
-          where("slug", "==", categorySlug)
-        );
+      const catQ = query(
+  collection(db, "categories"), 
+  where("adminId", "==", tenant.clientId),
+  where("name", "==", categorySlug) // Field name 'name' hona chahiye
+);
         const catSnap = await getDocs(catQ);
         if (!catSnap.empty) {
           setCategoryInfo(catSnap.docs[0].data());
@@ -96,7 +96,7 @@ useEffect(() => {
 
   {/* Heading */}
   <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-{categoryInfo?.title || `${categorySlug} Colleges`}  </h1>
+{categoryInfo?.displayName || categoryInfo?.title || `${categorySlug} Colleges`} </h1>
 
   {/* Description */}
   <p className="text-lg md:text-xl opacity-90 max-w-3xl mx-auto mb-10">

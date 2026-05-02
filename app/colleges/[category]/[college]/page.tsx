@@ -1,48 +1,51 @@
-import { collegeData } from "@/app/data/collegeData";
+"use client"; // Client component use karenge fetch karne ke liye
+import React, { useEffect, useState, use } from "react";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { notFound } from "next/navigation";
 import { MapPin, BookOpen, IndianRupee, GraduationCap, Phone } from "lucide-react";
+import { useTenant } from "../../../context/TenantContext";
 
-export  function generateStaticParams() {
-  const paths: { category: string; college: string }[] = [];
-  Object.entries(collegeData).forEach(([category, data]) => {
-    Object.keys(data.colleges).forEach((college) => {
-      paths.push({ category, college });
-    });
-  });
-  return paths;
-}
-
-// export default async function CollegeDetail({
-//   params,
-// }: {
-//   params: Promise<{ category: string; college: string }>;
-// }) {
-//   const { category: categorySlug, college: collegeSlug } = await params;
-//   const category = collegeData[categorySlug as keyof typeof collegeData];
-//   if (!category) return notFound();
-//   const college = category.colleges[collegeSlug as keyof typeof category.colleges];
-//   if (!college) return notFound();
-
-
-
-export default async function CollegeDetail({
+export default function CollegeDetail({
   params,
 }: {
   params: Promise<{ category: string; college: string }>;
 }) {
-  const { category: categorySlug, college: collegeSlug } = await params;
+  const { tenant, loading: tenantLoading } = useTenant();
+  const unwrappedParams = use(params);
+  const collegeId = unwrappedParams.college; // Firestore Doc ID
 
-  // 1. Get the category safely
-  const category = collegeData[categorySlug as keyof typeof collegeData];
-  
-  // 2. Add an early return if category doesn't exist (guards against 'never')
-  if (!category) return notFound();
+  const [college, setCollege] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  // 3. Cast the college selection so TS knows it's a specific college object
-  // This assumes your colleges are stored in an object called 'colleges'
-  const college = (category.colleges as any)[collegeSlug];
+  useEffect(() => {
+    const fetchCollege = async () => {
+      if (tenantLoading || !tenant?.clientId) return;
 
-  if (!college) return notFound();
+      try {
+        setLoading(true);
+        // Direct Firestore Doc fetch using the college ID
+        const docRef = doc(db, "colleges", collegeId);
+        const docSnap = await getDoc(docRef);
+
+      
+if (docSnap.exists()) {
+  setCollege(docSnap.data()); 
+} else {
+          setCollege("NOT_FOUND");
+        }
+      } catch (err) {
+        console.error("Error fetching college:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCollege();
+  }, [collegeId, tenant, tenantLoading]);
+
+  if (loading) return <div className="p-20 text-center font-bold">🚀 Fetching College Details...</div>;
+  if (college === "NOT_FOUND") return notFound();
 
   return (
     <div className="bg-gray-50">
