@@ -5,9 +5,25 @@ import { Phone, MapPin, Mail, MessageSquare, Clock, ArrowRight } from "lucide-re
 import CounsellingModal from "@/Components/CounsellingForm";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTenant } from "../app/context/TenantContext";
 
 export default function ContactPage() {
   const [openCounselling, setOpenCounselling] = useState(false);
+  const { tenant, loading } = useTenant();
+
+  // Loading state guard
+  if (loading) return <div className="min-h-screen bg-white" />;
+
+  // Firestore mapping
+  const footerData = tenant?.footer;
+  const branding = tenant?.branding;
+
+  // Helper function for dynamic values
+  const getValue = (key: string, defaultValue: string) => {
+    return footerData?.[key] || branding?.[key] || defaultValue;
+  };
+
+  const primaryColor = getValue('themePrimary', '#ea580c'); // Default orange-600
 
   return (
     <>
@@ -52,7 +68,8 @@ export default function ContactPage() {
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Purnea Office</h3>
                   <p className="text-slate-500 font-medium leading-relaxed">
-                    Old sipahi tola, near Canara Bank ATM,<br /> Purnea (Bihar) - 845401
+                   
+                    {getValue('address', ' Old sipahi tola, near Canara Bank ATM, Purnea (Bihar) - 845401')}
                   </p>
                 </motion.div>
 
@@ -84,8 +101,7 @@ export default function ContactPage() {
       {/* Top Row: Phone and WhatsApp side-by-side */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* WhatsApp Button */}
-        <a href="https://wa.me/918409463997" target="_blank" rel="noreferrer" className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
-          <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-600/40">
+<a href={`https://wa.me/${getValue('phone1', '').replace(/\D/g, '')}`} target="_blank" rel="noreferrer" className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">          <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-600/40">
             <MessageSquare size={20} />
           </div>
           <div>
@@ -95,28 +111,29 @@ export default function ContactPage() {
         </a>
 
         {/* First Phone Button */}
-        <a href="tel:+918409463997" className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
-          <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-600/40">
-            <Phone size={20} />
-          </div>
-          <div>
-            <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Call Expert</p>
-            <p className="text-lg font-black">+91 8252895483</p>
-          </div>
-        </a>
-      </div>
+       <a href={`tel:${getValue('phone1', '')}`} className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: primaryColor }}>
+                          <Phone size={20} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Call Expert</p>
+                          <p className="text-lg font-black">{getValue('phone1', 'Call Now')}</p>
+                        </div>
+                      </a>
+                    </div>
 
-      {/* Bottom Row: Second Phone Button (Full Width) */}
-      <a href="tel:+918409463997" className="flex items-center    gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
-        <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-600/40">
-          <Phone size={20} />
-        </div>
-        <div>
-          <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Support Line</p>
-          <p className="text-lg font-black">+91 84094 63997</p>
-        </div>
-      </a>
-
+                    {/* Phone 2 (Conditional) */}
+                    {getValue('phone2', '') && (
+                      <a href={`tel:${getValue('phone2', '')}`} className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-md border border-white/10 transition-all">
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: primaryColor }}>
+                          <Phone size={20} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold opacity-60 uppercase tracking-widest">Support Line</p>
+                          <p className="text-lg font-black">{getValue('phone2', '')}</p>
+                        </div>
+                      </a>
+                    )}
     </div>
   </div>
 </div>
@@ -126,12 +143,14 @@ export default function ContactPage() {
                 <div className="sm:col-span-1 bg-white p-6 rounded-3xl border border-slate-100 shadow-lg flex flex-col items-center justify-center text-center">
                   <Mail className="text-orange-500 mb-3" size={28} />
                   <p className="text-xs font-bold text-slate-400 uppercase mb-1">Email Us</p>
-                  <p className="text-sm font-bold text-slate-800 break-all">futurefocus199703@gmail.com</p>
+                  <p className="text-sm font-bold text-slate-800 break-all">   {getValue('email', 'futurefocus199703@gmail.com')}</p>
                 </div>
                 
                 <div className="sm:col-span-2 relative h-48 rounded-3xl overflow-hidden border-4 border-white shadow-2xl">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3593.447551065673!2d87.471!3d25.779!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDQ2JzQ0LjQiTiA4N8KwMjgnMTUuNiJF!5e0!3m2!1sen!2sin!4v1625000000000"
+                    // src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3593.447551065673!2d87.471!3d25.779!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDQ2JzQ0LjQiTiA4N8KwMjgnMTUuNiJF!5e0!3m2!1sen!2sin!4v1625000000000"
+                    src={getValue('mapLink', "https://www.google.com/maps/embed?pb=...")}
+                    
                     className="absolute inset-0 w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
                     allowFullScreen
                     loading="lazy"

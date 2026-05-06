@@ -164,6 +164,17 @@ useEffect(() => {
   }
 }, [tenant]);
 
+//logo
+
+const getDirectLink = (url: string) => {
+  if (!url) return "";
+  if (url.includes("drive.google.com")) {
+    const fileId = url.split("/d/")[1]?.split("/")[0];
+    return fileId ? `https://lh3.googleusercontent.com/u/0/d/${fileId}` : url;
+  }
+  return url;
+};
+
   return (
     
     <>
@@ -176,22 +187,32 @@ useEffect(() => {
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
 
         {/* LEFT : LOGO */}
-        <Link
+    <Link
   href="/"
   className="flex items-center gap-2 sm:gap-3 group select-none"
 >
-
-  {/* Logo Image */}
-  <div className="relative">
-  <Image
-                src={tenant?.branding?.logoUrl || "/future_focus.png"}
-                alt="Logo"
-                width={290}
-                height={90}
-                priority
-                className="h-9 sm:h-10 lg:h-15 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              />
+  {/* Logo Container */}
+  <div className="relative flex items-centerh-20  h-12  sm:h-14 lg:h-18">
+    {/* Priority: footer.footerLogoUrl > branding.logoUrl > logoUrl */}
+    {(tenant?.footer?.footerLogoUrl || tenant?.branding?.logoUrl || tenant?.logoUrl) ? (
+      <img
+        src={getDirectLink(tenant?.footer?.footerLogoUrl || tenant?.branding?.logoUrl || tenant?.logoUrl)}
+        alt="Logo"
+        className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+        onError={(e) => {
+          // Fallback agar link kharab ho
+          (e.target as HTMLImageElement).style.display = 'none';
+        }}
+      />
+    ) : (
+      // Default placeholder agar koi logo na mile
+      <div className="bg-orange-100 p-2 rounded-xl text-orange-600 shadow-sm">
+        <GraduationCap size={30} />
+      </div>
+    )}
   </div>
+ 
+
 
   {/* Brand Name */}
  <div className="flex flex-col leading-tight group">

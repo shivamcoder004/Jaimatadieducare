@@ -1,9 +1,11 @@
 
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import CounsellingModal from "@/Components/CounsellingForm";
-import { useState,useEffect } from "react";
+import { db } from "@/lib/firebase"; // Firebase import
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { useTenant } from "../../app/context/TenantContext";
 
 
 // --- Types ---
@@ -44,7 +46,32 @@ const coursesAfter12th: CourseCategory[] = [
 
 
 export default function After12thPage() {
+  const { tenant, loading: tenantLoading } = useTenant();
+  const [siteName, setSiteName] = useState("Future Focus");
     const [openCounselling, setOpenCounselling] = useState(false);
+
+
+    useEffect(() => {
+    const fetchSiteName = async () => {
+      if (tenantLoading || !tenant?.clientId) return;
+      try {
+        const q = query(collection(db, "clients"), where("clientId", "==", tenant.clientId));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          if (data.siteName) setSiteName(data.siteName);
+        }
+      } catch (err) {
+        console.error("Error fetching siteName:", err);
+      }
+    };
+    fetchSiteName();
+  }, [tenant, tenantLoading]);
+
+  // Site name split for styling (e.g., "Future | Focus")
+  const nameParts = siteName.split(" ");
+  const brandFirst = nameParts[0];
+  const brandRest = nameParts.slice(1).join(" ");
 
   return (
     <div className="min-h-screen bg-[#f8fafc] relative overflow-hidden font-sans">
@@ -52,13 +79,10 @@ export default function After12thPage() {
 
       
       {/* 1. DIAGONAL WATERMARK LAYER */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] rotate-[-12deg] scale-125 flex flex-col gap-12 select-none">
+     <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] rotate-[-12deg] scale-125 flex flex-col gap-12 select-none">
         {[...Array(10)].map((_, i) => (
-          // <div key={i} className="whitespace-nowrap text-6xl md:text-8xl font-black tracking-tighter text-indigo-900">
-          //   JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE HO • JAI MATA DI EDUCARE 
-          // </div>
-           <div key={i} className="whitespace-nowrap text-6xl md:text-8xl font-black tracking-tighter text-indigo-900">
-            Future Focus education consultancy • Future Focus education consultancy •Future Focus education consultancy •
+          <div key={i} className="whitespace-nowrap text-6xl md:text-8xl font-black tracking-tighter text-indigo-900 uppercase">
+            {siteName} Education Consultancy • {siteName} Education Consultancy • {siteName}
           </div>
         ))}
       </div>
@@ -72,7 +96,7 @@ export default function After12thPage() {
         
         {/* Large Decorative Text - Future */}
         <div className="absolute bottom-10 right-[-5%] text-[10rem] md:text-[15rem] font-black text-teal-900/[0.03] select-none whitespace-nowrap leading-none uppercase">
-          FUTURE
+          {brandFirst}
         </div>
 
         {/* Circular Academic Pattern */}
@@ -146,8 +170,9 @@ export default function After12thPage() {
 >
   Get In Touch →
 </button>
-           <p className="text-[10px] font-bold text-slate-400 italic">Future | Focus</p>
-        </div>
+<p className="text-[10px] font-bold text-slate-400 italic tracking-widest uppercase">
+            {brandFirst} | {brandRest || "Focus"}
+          </p>        </div>
       </main>
     </div>
   );

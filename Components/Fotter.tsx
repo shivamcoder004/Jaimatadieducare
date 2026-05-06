@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTenant } from "../app/context/TenantContext";
 import { 
   Facebook, 
   Twitter, 
@@ -17,6 +18,30 @@ import {
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+
+  const { tenant, loading } = useTenant();
+
+  // Loading state handle karna taaki blank na dikhe
+  if (loading) return <div className="h-20 bg-[#111827]" />;
+
+
+  const footerData = tenant?.footer;
+
+  const getDirectLink = (url: string) => {
+    if (!url) return "";
+    if (url.includes("drive.google.com")) {
+      const fileId = url.split("/d/")[1]?.split("/")[0];
+      return fileId ? `https://lh3.googleusercontent.com/u/0/d/${fileId}` : url;
+    }
+    return url;
+  };
+  const branding = tenant?.branding;
+  const getValue = (key: string, defaultValue: string) => {
+    return footerData?.[key] || branding?.[key] || defaultValue;
+  };
+
+  const rawLogoUrl = footerData?.footerLogoUrl || tenant?.logoUrl;
+  const finalLogoUrl = getDirectLink(rawLogoUrl);
 
   const footerLinks = {
     quickLinks: [
@@ -37,7 +62,10 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#002b4d] text-white pt-16 pb-6 px-4 md:px-6 relative overflow-hidden">
+    <footer className=" text-white pt-16 pb-6 px-4 md:px-6 relative overflow-hidden transition-all duration-500"
+    
+    style={{ backgroundColor: getValue('footerColor', '#002b4d') }}
+    >
       {/* Decorative Background Texture */}
       <div className="absolute inset-0 opacity-5 pointer-events-none" 
            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0V0zm1 1h18v18H1V1z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")` }}>
@@ -47,7 +75,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
           {/* Brand Section - SEO Focused */}
-          <div className="space-y-6">
+          {/* <div className="space-y-6">
             <div className="flex items-center gap-2">
               <div className="bg-orange-500 p-2 rounded-lg">
                 <GraduationCap size={28} className="text-white" />
@@ -71,7 +99,41 @@ export default function Footer() {
                 </motion.a>
               ))}
             </div>
+          </div> */}
+
+
+<div className="space-y-6">
+            <div className="flex items-center gap-2">
+            {(footerData?.footerLogoUrl || tenant?.logoUrl) ? (
+    <div className="relative h-12 w-auto flex items-center">
+      <img 
+        src={getDirectLink(footerData?.footerLogoUrl || tenant?.logoUrl)} 
+        alt="Logo" 
+        className="h-full w-auto object-contain"
+        onError={(e) => {
+          // Agar link invalid ho toh fallback icon dikhao
+          (e.target as HTMLImageElement).style.display = 'none';
+          (e.target as HTMLImageElement).parentElement!.classList.add("bg-orange-500", "p-2", "rounded-lg");
+        }}
+      />
+    </div>
+  ) : (
+    <div className="p-2 rounded-lg" style={{ backgroundColor: getValue('themePrimary', '#F4B400') }}>
+      <GraduationCap size={28} className="text-white" />
+    </div>
+  )}
+              <h2 className="text-2xl font-black tracking-tighter uppercase">
+                {tenant?.siteName?.split(' ')[0] || "Future"} 
+                <span className="underline decoration-2 ml-2" style={{ color: getValue('themePrimary', '#F4B400') }}>
+                   {tenant?.siteName?.split(' ')[1] || "Focus"}
+                </span>
+              </h2>
+            </div>
+            <p className="text-blue-100/70 text-sm leading-relaxed italic">
+              {tenant?.description || "Your trusted platform for college admissions, course information, and government exam updates across India. We bridge the gap between dreams and top-tier campuses."}
+            </p>
           </div>
+
 
           {/* Quick Links */}
           <div>
@@ -104,85 +166,69 @@ export default function Footer() {
           </div>
 
           {/* Contact Section */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-bold mb-6 border-b-2 border-orange-500 w-fit">Reach Us</h3>
+        <div className="space-y-6">
+            <h3 className="text-lg font-bold mb-6 border-b-2 w-fit" style={{ borderColor: getValue('themePrimary', '#F4B400') }}>Reach Us</h3>
             <div className="space-y-4">
-              {/* Added Location Motihari */}
               <div className="flex items-start gap-3">
-                <MapPin size={20} className="text-orange-500 shrink-0 mt-1" />
+                <MapPin size={20} className="shrink-0 mt-1" style={{ color: getValue('themePrimary', '#F4B400') }} />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Our Office</p>
-                  <p>Old sipahi tola near canera bank atm </p>
-                  <p>Purnea (Bihar) - 845401</p>
+                  <p>{getValue('address', 'Purnea, Bihar')}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <Mail size={20} className="text-orange-500 shrink-0" />
+                <Mail size={20} className="shrink-0" style={{ color: getValue('themePrimary', '#F4B400') }} />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Email Us</p>
-                  <a href="mailto:jai@gmail.com" className="hover:text-orange-400 transition-colors">futurefocus199703@gmail.com</a>
+                  <a href={`mailto:${getValue('email', '')}`} className="hover:text-orange-400">
+                    {getValue('email', 'info@futurefocus.in')}
+                  </a>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <Phone size={20} className="text-orange-500 shrink-0" />
+                <Phone size={20} className="shrink-0" style={{ color: getValue('themePrimary', '#F4B400') }} />
                 <div className="text-sm text-blue-100/70">
                   <p className="font-bold text-white">Call Experts</p>
-<a 
-  href="tel:+918409463997" 
-  className="font-semibold hover:text-orange-400 transition-colors duration-300"
->
-  +91 84094 63997
-</a>
-
-
-
-
-<p className='mt-5'>
-  
-<a 
-  href="tel:+918252895483" 
-  className="font-semibold hover:text-orange-400 transition-colors duration-300"
->
-  +91 8252895483
-</a>
-        
-</p>
-        </div>
+                  <a href={`tel:${getValue('phone1', '')}`} className="font-semibold hover:text-orange-400">
+                    {getValue('phone1', '+91 84094 63997')}
+                  </a>
+                  {footerData?.phone2 && (
+                    <p className='mt-1'>
+                      <a href={`tel:${footerData.phone2}`} className="font-semibold hover:text-orange-400">
+                        {footerData.phone2}
+                      </a>
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-
         </div>
 
         {/* SEO Keywords Tag Cloud */}
         <div className="border-t border-white/10 pt-8 mb-8">
           <p className="text-[10px] text-blue-100/30 uppercase tracking-[0.2em] font-bold mb-4">India's Best Admission Counselor in Motihari</p>
-         <div className="flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-blue-100/40 leading-relaxed">
-
-  <span>B.Tech Admission 2026</span> •
-  <span>Polytechnic Admission Bihar</span> •
-  <span>BCA / BBA Counselling</span> •
-  <span>MBA / MCA College Selection</span> •
-  <span>B.Sc Agriculture Admission</span> •
-  <span>B.Sc Nursing & GNM Admission</span> •
-  <span>B. Pharmacy Guidance</span> •
-  <span>BPT Physiotherapy Admission</span> •
-  <span>Hotel Management Colleges</span> •
-  <span>Law (BALLB) Admission Help</span> •
-  <span>Top Engineering Colleges Bihar</span> •
-  <span>Career Counselling after 12th</span> •
-  <span>Direct Admission Guidance</span> •
-  <span>Future focus Education Services</span>
-
-</div>
+   {tenant?.keywords && (
+          <div className="border-t border-white/10 pt-8 mb-8">
+             <div className="flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-blue-100/40">
+              {tenant.keywords.split(',').map((kw: string, i: number) => (
+                <span key={i} className="hover:text-white cursor-default transition-colors">
+                  {kw.trim()} {i < tenant.keywords.split(',').length - 1 ? '•' : ''}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
         </div>
 
         {/* Bottom Bar with Dasynoma Credits */}
         <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-xs text-blue-100/50 text-center md:text-left">
-             <p>© {currentYear} Future Focus Education Consultancy. All rights reserved.</p>
+            <div className="text-xs text-blue-100/50">
+             <p>{tenant?.footerText || `© ${currentYear} ${tenant?.siteName}. All rights reserved.`}</p>
+          </div>
              <p className="mt-1 flex items-center justify-center md:justify-start gap-2">
                 Made with ❤️ for Indian Students 
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>

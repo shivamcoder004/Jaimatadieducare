@@ -1,10 +1,13 @@
 "use client";
 import Image from 'next/image';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CounsellingModal from "@/Components/CounsellingForm";
-import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { db } from "@/lib/firebase"; 
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { useTenant } from "../../app/context/TenantContext";
+import {GraduationCap} from 'lucide-react'
 // --- Types ---
 interface FeatureCardProps {
   icon: string;
@@ -101,7 +104,93 @@ const FeatureCard = ({ icon, title, description, className }: FeatureCardProps) 
 );
 
 export default function AboutPage() {
+
+  const { tenant, loading: tenantLoading } = useTenant();
+    const [siteName, setSiteName] = useState("Future Focus");
   const [openCounselling, setOpenCounselling] = useState(false);
+const [ownerImage, setOwnerImage] = useState(""); // Image ke liye naya state
+
+   const footerData = tenant?.footer;
+  const branding = tenant?.branding;
+
+  // Helper function for dynamic values
+  const getValue = (key: string, defaultValue: string) => {
+    return footerData?.[key] || branding?.[key] || defaultValue;
+  };
+
+  
+      useEffect(() => {
+      const fetchSiteName = async () => {
+        if (tenantLoading || !tenant?.clientId) return;
+        try {
+          const q = query(collection(db, "clients"), where("clientId", "==", tenant.clientId));
+          const querySnapshot = await getDocs(q);
+          if (!querySnapshot.empty) {
+            const data = querySnapshot.docs[0].data();
+            if (data.siteName) setSiteName(data.siteName);
+          }
+        } catch (err) {
+          console.error("Error fetching siteName:", err);
+        }
+      };
+      fetchSiteName();
+    }, [tenant, tenantLoading]);
+
+useEffect(() => {
+    const fetchClientData = async () => {
+      console.log("1. Fetch sequence started for clientId:", tenant?.clientId);
+      
+      if (tenantLoading || !tenant?.clientId) {
+        console.log("2. Waiting for tenant to load...");
+        return;
+      }
+
+      try {
+        const q = query(collection(db, "clients"), where("clientId", "==", tenant.clientId));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          console.log("3. Firestore Data Received:", data);
+          
+          if (data.siteName) setSiteName(data.siteName);
+          
+          if (data.ownerImageUrl) {
+            console.log("4. Setting ownerImage state with:", data.ownerImageUrl);
+            setOwnerImage(data.ownerImageUrl);
+          } else {
+            console.warn("4. ownerImageUrl field not found in Firestore document!");
+          }
+        } else {
+          console.error("3. No document found in Firestore for this clientId!");
+        }
+      } catch (err) {
+        console.error("Firestore Error:", err);
+      }
+    };
+
+    fetchClientData();
+  }, [tenant, tenantLoading]);
+const getDirectLink = (url: string) => {
+  if (!url) return "";
+  
+  if (url.includes("drive.google.com")) {
+    const fileId = url.split("/d/")[1]?.split("/")[0] || url.split("id=")[1]?.split("&")[0];
+    
+    if (fileId) {
+      // Ye format (lh3.googleusercontent.com) sabse stable hai images ke liye
+      return `https://lh3.googleusercontent.com/d/${fileId}`;
+    }
+  }
+  return url;
+};
+  
+    // Site name split for styling (e.g., "Future | Focus")
+    const nameParts = siteName.split(" ");
+    const brandFirst = nameParts[0];
+    const brandRest = nameParts.slice(1).join(" ");
+
+
 
   return (
     <>
@@ -120,7 +209,7 @@ export default function AboutPage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-600"></span>
               </span>
-              <span className="text-sm font-black text-slate-700 tracking-[0.2em] uppercase">Future Focus</span>
+              <span className="text-sm font-black text-slate-700 tracking-[0.2em] uppercase">{siteName}</span>
             </div>
 
             <h1 className="text-6xl md:text-[110px] font-black leading-[0.9] tracking-tighter text-slate-900">
@@ -141,8 +230,7 @@ export default function AboutPage() {
                 Explore Our Process
               </button> */}
              <a 
-  href="tel:+919876543210" 
-  className="px-10 py-5 bg-white text-slate-900 border-2 border-slate-100 rounded-[2rem] font-bold text-lg hover:border-orange-500 transition-all shadow-lg flex items-center gap-3 group"
+href={`tel:${getValue('phone1', '')}`}  className="px-10 py-5 bg-white text-slate-900 border-2 border-slate-100 rounded-[2rem] font-bold text-lg hover:border-orange-500 transition-all shadow-lg flex items-center gap-3 group"
 >
   {/* Animated Phone Icon */}
   <span className="bg-orange-100 p-2 rounded-full group-hover:bg-orange-500 group-hover:text-white transition-colors">
@@ -323,13 +411,81 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-20 items-center">
           <div className="md:w-1/2 relative group">
             <div className="absolute inset-0 bg-orange-600 rounded-[4rem] rotate-3 group-hover:rotate-0 transition-all duration-700"></div>
-            <div className="relative aspect-[4/5] bg-slate-200 rounded-[4rem] overflow-hidden border-4 border-white shadow-2xl">
-               <img 
-                 src="/futurefoucusowner.png" 
-                 alt="Founder" 
-                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-               />
-            </div>
+<div className="relative aspect-[4/5] bg-gradient-to-br from-slate-100 to-slate-200 rounded-[4rem] overflow-hidden border-4 border-white shadow-2xl group">
+
+ 
+
+  {/* Yahan ownerImage state use ki gayi hai */}
+
+  {ownerImage ? (
+
+    <img
+
+      src={getDirectLink(ownerImage)}
+
+      alt="Founder"
+
+      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+
+      onError={(e) => {
+
+        console.log("Image Load Failed");
+
+        setOwnerImage(""); // Fallback trigger karne ke liye
+
+      }}
+
+    />
+
+  ) : (
+
+    /* --- Modern Fallback Design --- */
+
+    <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center overflow-hidden bg-slate-50">
+
+      <div className="absolute -top-10 -right-10 w-40 h-40 bg-orange-500/10 rounded-full blur-3xl animate-pulse" />
+
+      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+
+     
+
+      <div className="relative mb-6">
+
+        <div className="w-24 h-24 bg-white rounded-[2rem] shadow-xl flex items-center justify-center rotate-12 group-hover:rotate-0 transition-transform duration-500">
+
+           <GraduationCap size={48} className="text-orange-500" />
+
+        </div>
+
+      </div>
+
+
+
+      <div className="space-y-2 z-10">
+
+        <h4 className="text-2xl font-black text-slate-800 tracking-tighter uppercase leading-none">
+
+          {brandFirst} <br />
+
+          <span className="text-orange-600">{brandRest}</span>
+
+        </h4>
+
+        <div className="w-12 h-1 bg-slate-300 mx-auto rounded-full" />
+
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+
+          Expert Counselling
+
+        </p>
+
+      </div>
+
+    </div>
+
+  )}
+
+</div> 
           </div>
           <div className="md:w-1/2 space-y-8">
             <h2 className="text-5xl font-black text-slate-900 leading-[1.1]">
@@ -339,7 +495,7 @@ export default function AboutPage() {
               "Humara wada hai ki hum aapko kabhi bhatakne nahi denge. Aapka future hamari zimmedari hai."
             </div>
             <div className="pt-4 font-black tracking-widest text-slate-900 uppercase">
-              — Team Future Focus Educational Consultancy
+              — Team {siteName} Educational Consultancy
             </div>
           </div>
         </div>

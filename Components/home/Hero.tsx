@@ -1,9 +1,46 @@
 "use client";
 
+
+import React, { useState, useEffect } from "react"; 
 import Link from "next/link";
 import Image from "next/image"; // Agar image use karni ho toh
+import { db } from "@/lib/firebase"; // Firebase config import karein
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { useTenant } from "../../app/context/TenantContext";
 
 export default function Hero() {
+  const { tenant, loading: tenantLoading } = useTenant();
+  const [siteName, setSiteName] = useState("Future Focus");
+
+
+
+  useEffect(() => {
+    const fetchSiteName = async () => {
+      if (tenantLoading || !tenant?.clientId) return;
+
+      try {
+        // 'clients' collection se siteName fetch karna
+        const q = query(collection(db, "clients"), where("clientId", "==", tenant.clientId));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const clientData = querySnapshot.docs[0].data();
+          if (clientData.siteName) {
+            setSiteName(clientData.siteName);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching siteName:", error);
+      }
+    };
+
+    fetchSiteName();
+  }, [tenant, tenantLoading]);
+
+  // Site name ko split karna taaki "Focus" ya last word orange dikhe
+  const nameParts = siteName.split(" ");
+  const firstName = nameParts.slice(0, -1).join(" ");
+  const lastWord = nameParts[nameParts.length - 1];
   return (
 <>
 
@@ -53,11 +90,11 @@ export default function Hero() {
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-white">
-  Future <span className="text-orange-500">Focus</span> <br />
-  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F4D03F] to-orange-500">
-    Shaping Successful Careers
-  </span>
-</h1>
+              {firstName} <span className="text-orange-500">{lastWord}</span> <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F4D03F] to-orange-500 text-3xl md:text-4xl">
+                Shaping Successful Careers
+              </span>
+            </h1>
 
 <p className="text-lg lg:text-xl text-gray-400 leading-relaxed max-w-xl mt-4">
   Join 15,000+ students who achieved their dream college through our 

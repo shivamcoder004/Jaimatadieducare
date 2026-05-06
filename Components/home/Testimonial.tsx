@@ -2,8 +2,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { db, auth } from "@/lib/firebase"; // Firebase import karein
-import { collection, addDoc, query, where, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs,query, where, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { useTenant } from "@/app/context/TenantContext";
+import Link from "next/link";
+import Image from "next/image"; // Agar image use karni ho toh
+
+
 
 // --- Types ---
 interface StudentReview {
@@ -22,8 +26,11 @@ export default function TestimonialSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggedIn] = useState(true); 
   const scrollRef = useRef<HTMLDivElement>(null);
+    const [siteName, setSiteName] = useState("Future Focus");
+    const { tenant, loading: tenantLoading } = useTenant();
+  
 
-const { tenant } = useTenant(); // Admin ID lene ke liye
+// const { tenant } = useTenant(); // Admin ID lene ke liye
  
 const [reviews, setReviews] = useState<StudentReview[]>([]);
 
@@ -108,7 +115,28 @@ const [reviews, setReviews] = useState<StudentReview[]>([]);
 
 
 
+// --- 2. Fetch Site Name from Firebase ---
+  useEffect(() => {
+    const fetchSiteName = async () => {
+      if (tenantLoading || !tenant?.clientId) return;
 
+      try {
+        const q = query(collection(db, "clients"), where("clientId", "==", tenant.clientId));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const clientData = querySnapshot.docs[0].data();
+          if (clientData.siteName) {
+            setSiteName(clientData.siteName);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching siteName:", error);
+      }
+    };
+
+    fetchSiteName();
+  }, [tenant, tenantLoading]);
 
 
 
@@ -125,6 +153,12 @@ const [reviews, setReviews] = useState<StudentReview[]>([]);
   };
 
 
+
+
+  // Site name ko split karna taaki "Focus" ya last word orange dikhe
+  const nameParts = siteName.split(" ");
+  const firstName = nameParts.slice(0, -1).join(" ");
+  const lastWord = nameParts[nameParts.length - 1];
 
   return (
     <section className="bg-[#fcfaf2] py-20 px-4 md:px-6 relative overflow-hidden group">
@@ -150,8 +184,9 @@ const [reviews, setReviews] = useState<StudentReview[]>([]);
           <div className="text-left">
             <div className="flex items-center gap-2 mb-2">
                 <span className="h-[2px] w-8 bg-emerald-700"></span>
-                <p className="text-emerald-800 font-bold text-xs tracking-[0.3em] uppercase">Future <span className='text-amber-300'>Focus</span></p>
-            </div>
+<p className="text-emerald-800 font-bold text-xs tracking-[0.3em] uppercase">
+                  {firstName} <span className='text-amber-400'>{lastWord}</span>
+                </p>            </div>
             <h2 className="text-4xl md:text-6xl font-serif text-slate-900">Student <span className="text-emerald-700 italic">Success Stories</span></h2>
             <p className="text-slate-500 mt-3 font-medium max-w-md">Real experiences from students who found their dream campus with Our counserlor.</p>
           </div>

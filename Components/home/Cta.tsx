@@ -1,9 +1,39 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { db } from "@/lib/firebase"; // Firebase import
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { useTenant } from "../../app/context/TenantContext";
 
 export default function CTASection() {
+
+  const { tenant, loading: tenantLoading } = useTenant();
+    const [siteName, setSiteName] = useState("Future Focus");
+
+
+    
+        useEffect(() => {
+        const fetchSiteName = async () => {
+          if (tenantLoading || !tenant?.clientId) return;
+          try {
+            const q = query(collection(db, "clients"), where("clientId", "==", tenant.clientId));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+              const data = querySnapshot.docs[0].data();
+              if (data.siteName) setSiteName(data.siteName);
+            }
+          } catch (err) {
+            console.error("Error fetching siteName:", err);
+          }
+        };
+        fetchSiteName();
+      }, [tenant, tenantLoading]);
+    
+      // Site name split for styling (e.g., "Future | Focus")
+      const nameParts = siteName.split(" ");
+      const brandFirst = nameParts[0];
+      const brandRest = nameParts.slice(1).join(" ");
   return (
     <section className="py-16 px-4 md:px-6">
       <div className="max-w-7xl mx-auto relative overflow-hidden bg-[#003d66] rounded-[2.5rem] p-8 md:p-16 text-center shadow-2xl">
@@ -59,7 +89,7 @@ export default function CTASection() {
           </h2>
 
           <p className="text-blue-100 text-lg md:text-xl mb-10 leading-relaxed font-light">
-            Join lakhs of students who trust <span className="font-bold text-white underline decoration-yellow-400 decoration-2 underline-offset-4">Future Focus</span> for their college and course selection.
+            Join lakhs of students who trust <span className="font-bold text-white underline decoration-yellow-400 decoration-2 underline-offset-4">{siteName}</span> for their college and course selection.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
