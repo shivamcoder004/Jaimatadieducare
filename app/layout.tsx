@@ -88,11 +88,14 @@ import Navbar from "@/Components/Navbar";
 import Footer from "@/Components/Fotter";
 import { TenantProvider } from "./context/TenantContext";
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs,limit } from "firebase/firestore";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import WhatsAppButton from "@/Components/WhatsAppButton";
 
+
+export const revalidate = 0; 
+export const dynamic = "force-dynamic";
 
 
 const getDirectLink = (url: string) => {
@@ -105,7 +108,17 @@ const getDirectLink = (url: string) => {
 export async function generateMetadata(): Promise<Metadata> {
   const headerList = await headers();
   const host = headerList.get("host") || "";
+  console.log("HOST:", host);
+
+  const cleanHost = host.split(":")[0];
   
+
+// Logic: Agar localhost hai toh testing domain use karo, varna live host
+  const domainToSearch = (cleanHost === "localhost" || cleanHost === "127.0.0.1")
+    ? "collegecounselling.testyug.in"
+    : cleanHost;
+
+
   // --- 1. DEFAULT VALUES (Agar DB mein data na mile) ---
   let siteTitle = "FutureFocuss – Career & Admission Counselling";
   let siteDescription = "FutureFocuss provides free admission counselling in Patna and Bihar for BTech, MBBS, MBA, B.Ed, and other professional courses.";
@@ -115,31 +128,23 @@ export async function generateMetadata(): Promise<Metadata> {
 
   try {
     // --- 2. FETCH DATA FROM FIREBASE ---
-    const q = query(collection(db, "clients"), where("domain", "==", host));
+    const q = query(collection(db, "clients"), where("domain", "==", domainToSearch), limit(1));
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
       const data = querySnapshot.docs[0].data();
       
-      // Dynamic mapping
-siteTitle = data.title || (data.siteName ? `${data.siteName} – Admission Counselling` : siteTitle);
-const rawLogo = data.branding?.logoUrl || data.favicon;
+ siteTitle = data.title || data.siteName || siteTitle;
+      siteDescription = data.description || siteDescription;
+      siteKeywords = data.keywords || siteKeywords;
+      
+      const rawLogo = data.branding?.logoUrl || data.favicon;
       if (rawLogo) {
         faviconUrl = getDirectLink(rawLogo);
-        logoUrl = faviconUrl; // SEO images ke liye bhi same use hoga
       }
-      // faviconUrl = data.branding?.logoUrl || data.favicon || faviconUrl;
-
-
-
-      // logoUrl = data.branding?.logoUrl || logoUrl;
-      
-      // Agar aapne Firestore mein ye fields banayi hain toh wo fetch hongi
-      if (data.description) siteDescription = data.description;
-      if (data.keywords) siteKeywords = data.keywords;
     }
   } catch (error) {
-    console.error("SEO Metadata fetch error:", error);
+    console.error("Metadata fetch error:", error);
   }
 
   // --- 3. RETURN FULL SEO METADATA ---
