@@ -129,6 +129,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const headerList = await headers();
   const host = headerList.get("host") || "";
 
+  const protocol =
+    host.includes("localhost") || host.includes("127.0.0.1")
+      ? "http"
+      : "https";
+
+  const baseUrl = `${protocol}://${host}`;
+
+
   // Defaults
   let siteTitle = "Expert Career & Admission Counselling | Direct Admission Guidance";
   let siteDescription = "Expert admission guidance for Nursing, MBBS, B.Tech, MBA, BCA, B.Ed, and D.El.Ed across India. Get complete details on eligibility, fees, top colleges, entrance exams, and direct admission support near you.";
@@ -144,8 +152,13 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
+        metadataBase: new URL(baseUrl),
+
     title: siteTitle,
     description: siteDescription,
+    alternates: {
+      canonical: "/",
+    },
     icons: {
       icon: [
         { url: faviconUrl },
@@ -155,8 +168,12 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: siteTitle,
       description: siteDescription,
-      url: `https://${host}`,
+      url:baseUrl,
       images: [{ url: faviconUrl }],
+    },
+      robots: {
+      index: true,
+      follow: true,
     },
   };
 }
