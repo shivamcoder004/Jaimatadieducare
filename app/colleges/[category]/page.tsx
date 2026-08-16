@@ -96,11 +96,11 @@ useEffect(() => {
 
   {/* Heading */}
   <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-{categoryInfo?.displayName || categoryInfo?.title || `${categorySlug} Colleges`} </h1>
+{categoryInfo?.displayName || categoryInfo?.title || `${categorySlug?.split("_").pop()} Colleges`} </h1>
 
   {/* Description */}
   <p className="text-lg md:text-xl opacity-90 max-w-3xl mx-auto mb-10">
-{categoryInfo?.description || `Explore top-rated ${categorySlug} institutions and find the best fit for your career.`}
+{categoryInfo?.description || `Explore top-rated ${categorySlug?.split("_").pop()} institutions and find the best fit for your career.`}
   </p>
 
   {/* CTA Buttons */}

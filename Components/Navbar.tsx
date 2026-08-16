@@ -43,6 +43,15 @@ const [dbCourses, setDbCourses] = useState<{slug: string, title: string}[]>([]);
 const pathname = usePathname();
 
 const [dbCategories, setDbCategories] = useState<{slug: string, title: string}[]>([]);
+const [studentCardOpen, setStudentCardOpen] = useState(false);
+const [studentCardColleges, setStudentCardColleges] = useState<
+  {
+    id: string;
+    name: string;
+    slug: string;
+    category: string;
+  }[]
+>([]);
 const nameParts = tenant?.siteName ? tenant.siteName.split("  ") : ["Future", "Focus"];
   const firstPart = nameParts[0]; 
   const secondPart = nameParts.slice(1).join(" ");
@@ -63,7 +72,53 @@ useEffect(() => {
 
 
 
+useEffect(() => {
+  const fetchStudentCardColleges = async () => {
+    if (loading || !tenant?.clientId) return;
 
+    try {
+      const q = query(
+        collection(db, "colleges"),
+        where("adminId", "==", tenant.clientId)
+      );
+
+      const snap = await getDocs(q);
+
+      const colleges = snap.docs.map((collegeDoc) => {
+        const data = collegeDoc.data();
+
+        return {
+          id: collegeDoc.id,
+
+          // Actual College Name
+          name:
+            data.collegeName ||
+            data.name ||
+            data.title ||
+            "",
+
+          // College Slug
+          slug:
+            data.slug ||
+            collegeDoc.id,
+
+          // Existing College Category
+          category:
+            data.categorySlug ||
+            "",
+        };
+      });
+
+      console.log("✅ ONLY COLLEGES:", colleges);
+
+      setStudentCardColleges(colleges);
+    } catch (error) {
+      console.error("❌ College fetch error:", error);
+    }
+  };
+
+  fetchStudentCardColleges();
+}, [tenant, loading]);
 
 
 
@@ -244,7 +299,7 @@ const getDirectLink = (url: string) => {
             onMouseLeave={() => setCourseOpen(false)}
           >
             <button className="flex items-center gap-1 hover:text-orange-500 transition ">
-              Courses <ChevronDown size={16}/>
+              Coursess <ChevronDown size={16}/>
             </button>
 
             <div className={`dropdown w-64 ${courseOpen ? "dropdown-show" : ""}`}>
@@ -341,6 +396,39 @@ const getDirectLink = (url: string) => {
   <Link href="/Job" className="hover:text-orange-500 transition  ">
     Job
   </Link>
+)}
+
+
+{!loading && tenant?.permissions?.canbiharstudentcreditcard === true && (
+  <div
+    className="relative"
+    onMouseEnter={() => setStudentCardOpen(true)}
+    onMouseLeave={() => setStudentCardOpen(false)}
+  >
+    <button className="flex items-center gap-1 hover:text-orange-500 transition">
+      Bihar Student Card College
+      <ChevronDown size={16} />
+    </button>
+
+    <div
+      className={`dropdown w-80 ${
+        studentCardOpen ? "dropdown-show" : ""
+      }`}
+    >
+      <ul className="space-y-2 border-t-2 border-orange-500 pt-3">
+        {studentCardColleges.map((college) => (
+          <li key={college.id}>
+           <Link
+  href={`/colleges/${college.category}/${college.slug}`}
+  className="block px-3 py-2 hover:text-orange-500 hover:bg-gray-50 rounded"
+>
+  {college.name}
+</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
 )}
           <Link href="/contact" className="hover:text-orange-500 transition">Contact</Link>
         </nav>

@@ -66,7 +66,7 @@ export default function ContactPage() {
                   <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 mb-6">
                     <MapPin size={24} />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Purnea Office</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">our Office</h3>
                   <p className="text-slate-500 font-medium leading-relaxed">
                    
                     {getValue('address', ' Old sipahi tola, near Canara Bank ATM, Purnea (Bihar) - 845401')}
