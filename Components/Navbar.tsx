@@ -766,7 +766,7 @@ const getDirectLink = (url: string) => {
    <div className="bg-blue-50 rounded-xl p-3 text-center mt-2">
   <p className="text-sm text-gray-600">Contact With Us</p>
 
-  {footerData?.phone2 && (
+  {footerData?.phone1 && (
     <p className="font-semibold text-blue-900 flex items-center justify-center gap-2 mt-1">
       <Phone size={16} />
 
