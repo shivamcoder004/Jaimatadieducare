@@ -57,6 +57,8 @@ const [studentCardColleges, setStudentCardColleges] = useState<
 const nameParts = tenant?.siteName ? tenant.siteName.split("  ") : ["Future", "Focus"];
   const firstPart = nameParts[0]; 
   const secondPart = nameParts.slice(1).join(" ");
+  // const hideSiteName =
+  // tenant?.siteName?.trim().toLowerCase() === "College Counselling";
 
 
 useEffect(() => {
@@ -272,17 +274,19 @@ const getDirectLink = (url: string) => {
 
 
   {/* Brand Name */}
- <div className="flex flex-col leading-tight group">
-              {/* First Part (e.g., Future / Jai) */}
-<span className="text-xs sm:text-lg lg:text-[20px] tracking-[2px] text-orange-500 font-semibold uppercase">  
-                {loading ? "Loading..." : firstPart}
-              </span>
+{tenant?.siteName?.trim().toLowerCase() !== "jaimatadieducare" && (
 
-              {/* Second Part (e.g., Focus / Mata Di) */}
-<span className="text-lg sm:text-xl lg:text-2xl font-extrabold text-blue-900! transition-colors duration-300">                {loading ? "" : secondPart}
-              </span>
-            </div>
+  <div className="flex flex-col leading-tight group">
+                {/* First Part (e.g., Future / Jai) */}
+  <span className="text-xs sm:text-lg lg:text-[20px] tracking-[2px] text-orange-500 font-semibold uppercase">  
+                  {loading ? "Loading..." : firstPart}
+                </span>
 
+                {/* Second Part (e.g., Focus / Mata Di) */}
+  <span className="text-lg sm:text-xl lg:text-2xl font-extrabold text-blue-900! transition-colors duration-300">                {loading ? "" : secondPart}
+                </span>
+              </div>
+    )}
 </Link>
 
     
