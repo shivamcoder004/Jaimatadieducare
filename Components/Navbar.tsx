@@ -34,6 +34,8 @@ export default function Navbar() {
   const [user, setUser] = useState<any>(null); // User state
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { tenant, loading } = useTenant();
+    const footerData = tenant?.footer;
+
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [courseOpen, setCourseOpen] = useState(false);
@@ -651,6 +653,45 @@ const getDirectLink = (url: string) => {
 </ul>
     </details>
 
+    {/* Bihar Student Credit Card - Mobile */}
+{!loading && tenant?.permissions?.canbiharstudentcreditcard === true && (
+  <details className="group">
+    <summary className="flex items-center justify-between cursor-pointer text-lg font-semibold hover:text-orange-500 list-none">
+      <div className="flex items-center gap-3">
+        <GraduationCap size={20} className="text-blue-600" />
+        Bihar Student Card College
+      </div>
+
+      <ChevronDown
+        size={20}
+        className="group-open:rotate-180 transition-transform duration-200"
+      />
+    </summary>
+
+    <ul className="space-y-2 border-t-2 border-orange-500 pt-3 mt-3">
+      {studentCardColleges.length > 0 ? (
+        studentCardColleges.map((college) => (
+          <li key={college.id}>
+            <Link
+              href={`/colleges/${college.category}/${college.slug}`}
+              onClick={() => setMobileOpen(false)}
+              className="block px-3 py-2 rounded hover:text-orange-500 hover:bg-gray-50 transition"
+            >
+              {college.name}
+            </Link>
+          </li>
+        ))
+      ) : (
+        <li className="px-3 py-2 text-gray-500 text-sm">
+          No colleges available
+        </li>
+      )}
+    </ul>
+  </details>
+)}
+
+    
+
     {/* About */}
     <Link onClick={()=>setMobileOpen(false)} href="/about"
       className="flex items-center gap-3 text-lg hover:text-orange-500 transition">
@@ -668,6 +709,8 @@ const getDirectLink = (url: string) => {
     Job
   </Link>
 )}
+
+
 
     {/* Contact */}
     <Link onClick={()=>setMobileOpen(false)} href="/contact"
@@ -720,12 +763,22 @@ const getDirectLink = (url: string) => {
 </button>
 
     {/* Bottom Contact */}
-    <div className="bg-blue-50 rounded-xl p-3text-center mt-2">
-      <p className="text-sm text-gray-600">Contact With Us</p>
-      <p className="font-semibold text-blue-900 flex items-center justify-center gap-2 mt-1">
-        <Phone size={16}/> 8409463997
-      </p>
-    </div>
+   <div className="bg-blue-50 rounded-xl p-3 text-center mt-2">
+  <p className="text-sm text-gray-600">Contact With Us</p>
+
+  {footerData?.phone2 && (
+    <p className="font-semibold text-blue-900 flex items-center justify-center gap-2 mt-1">
+      <Phone size={16} />
+
+      <a
+        href={`tel:${footerData.phone1}`}
+        className="hover:text-orange-400"
+      >
+        {footerData.phone1}
+      </a>
+    </p>
+  )}
+</div>
 
   </div>
 </div>
